@@ -155,6 +155,26 @@
       font-size: 14px;
     }
 
+    .guide-lines {
+      display: grid;
+      gap: 6px;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .guide-lines p {
+      margin: 0;
+    }
+
+    .guide-lines strong {
+      color: #3b4a54;
+    }
+
+    .source-line {
+      font-size: 12px;
+    }
+
     dl {
       display: grid;
       grid-template-columns: 98px 1fr;
@@ -419,6 +439,544 @@
           "Planche": "0cMXdZL9ESA"
     };
 
+    const exerciseGuides = {
+          "שחייה – Catch-Up Drill": {
+                "how": "שוחים חופשי כשיד אחת נשארת קדימה עד שהיד השנייה מגיעה אליה, ואז מחליפים ידיים.",
+                "helps": "עוזר לשפר טכניקת שחייה, תחושת מים ותזמון תנועה.",
+                "source": "How to swim a Catch Up Drill | FORM"
+          },
+          "שחייה – Fingertip Drag": {
+                "how": "בזמן החזרת היד קדימה גוררים בעדינות את קצות האצבעות על פני המים.",
+                "helps": "עוזר לשפר טכניקת שחייה, תחושת מים ותזמון תנועה.",
+                "source": "Finger-Tip Drag Drill | TriDot Swim Drill Series"
+          },
+          "שחייה – Single Arm Drill": {
+                "how": "שוחים עם יד אחת עובדת בכל פעם, כשהיד השנייה נשארת קדימה או לצד הגוף לפי ההדגמה.",
+                "helps": "עוזר לשפר טכניקת שחייה, תחושת מים ותזמון תנועה.",
+                "source": "How to swim a one-arm drill | FORM"
+          },
+          "שחייה – Sculling": {
+                "how": "מבצעים תנועות קטנות של כפות הידיים במים כדי להרגיש לחץ ואחיזה במים.",
+                "helps": "עוזר לשפר טכניקת שחייה, תחושת מים ותזמון תנועה.",
+                "source": "Swim Drills: Sculling Explained... 4 types of Sculling you need to be using! | TriManual"
+          },
+          "שחייה – 6-1-6 Drill": {
+                "how": "שוחים 6 בעיטות על הצד, עושים תנועה אחת ביד, ואז עוברים ל-6 בעיטות בצד השני.",
+                "helps": "עוזר לשפר טכניקת שחייה, תחושת מים ותזמון תנועה.",
+                "source": "6/1/6 Drill | TriDot Swim Drill Series"
+          },
+          "שחייה – Tarzan Drill": {
+                "how": "שוחים חופשי עם הראש מעל המים ושומרים על קצב ידיים חזק ויציב.",
+                "helps": "עוזר לשפר טכניקת שחייה, תחושת מים ותזמון תנועה.",
+                "source": "Improve Your Freestyle with the Tarzan Drill"
+          },
+          "רכיבה – High Cadence Drill": {
+                "how": "מדוושים לפרקים קצרים בקאדנס גבוה עם עומס קל ושומרים על דיווש חלק.",
+                "helps": "עוזר לשפר שליטה באופניים, דיווש ובטיחות ברכיבה.",
+                "source": "Spin-Ups - A High-Cadence drill by Propel Endurance Training"
+          },
+          "רכיבה – Single Leg Drill": {
+                "how": "מדוושים ברגל אחת בכל פעם כדי להרגיש את כל מעגל הדיווש.",
+                "helps": "עוזר לשפר שליטה באופניים, דיווש ובטיחות ברכיבה.",
+                "source": "How to Master Cycling Single Legs Drills Explained"
+          },
+          "רכיבה – Cornering Practice": {
+                "how": "מתרגלים כניסה לפנייה, מבט לכיוון היציאה וקו רכיבה חלק ובטוח.",
+                "helps": "עוזר לשפר שליטה באופניים, דיווש ובטיחות ברכיבה.",
+                "source": "7 Top Tips To Corner Faster On A Road Bike"
+          },
+          "רכיבה – Emergency Braking": {
+                "how": "מתרגלים בלימה חזקה ומבוקרת עם חלוקת משקל ושליטה בכידון.",
+                "helps": "עוזר לשפר שליטה באופניים, דיווש ובטיחות ברכיבה.",
+                "source": "Cycling Tips Emergency Brake Technique!"
+          },
+          "רכיבה – Bottle Pick-Up": {
+                "how": "מתרגלים שליפת בקבוק והחזרתו תוך שמירה על קו רכיבה יציב.",
+                "helps": "עוזר לשפר שליטה באופניים, דיווש ובטיחות ברכיבה.",
+                "source": "Bottle Pick Up | Bikebug Training Tips"
+          },
+          "ריצה – A-Skip": {
+                "how": "מבצעים דילוג קצבי עם ברך עולה וכף רגל פעילה מתחת לגוף.",
+                "helps": "עוזר לשפר קואורדינציה, יציבה וקצב בריצה.",
+                "source": "A skip, B skip, C skip for running drills"
+          },
+          "ריצה – B-Skip": {
+                "how": "מבצעים דילוג עם ברך עולה ואז יישור רגל קדימה ומשיכה חזרה לקרקע.",
+                "helps": "עוזר לשפר קואורדינציה, יציבה וקצב בריצה.",
+                "source": "How To B Skip | Chari Hawkins"
+          },
+          "ריצה – High Knees": {
+                "how": "רצים במקום או קדימה עם ברכיים גבוהות וקצב מהיר של כפות הרגליים.",
+                "helps": "עוזר לשפר קואורדינציה, יציבה וקצב בריצה.",
+                "source": "High Knees Drill For Runners - Dr. Jordan Fairley"
+          },
+          "ריצה – Butt Kicks": {
+                "how": "רצים קל כשהעקבים עולים לכיוון הישבן ושומרים על גוף זקוף.",
+                "helps": "עוזר לשפר קואורדינציה, יציבה וקצב בריצה.",
+                "source": "Butt Kicks Running Form Drill Demonstration"
+          },
+          "ריצה – Bounding": {
+                "how": "מבצעים צעדים קפיציים וארוכים עם דחיפה חזקה מהרגל האחורית.",
+                "helps": "עוזר לשפר קואורדינציה, יציבה וקצב בריצה.",
+                "source": "Bounding (Running Drill)"
+          },
+          "ריצה – Strides": {
+                "how": "רצים האצות קצרות ומבוקרות, לא ספרינט מלא, עם התאוששות קלה ביניהן.",
+                "helps": "עוזר לשפר קואורדינציה, יציבה וקצב בריצה.",
+                "source": "Runners Guide: Strides"
+          },
+          "Cat-Cow": {
+                "how": "בעמידת שש מקמרים ומקערים את הגב בתנועה איטית יחד עם נשימה.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "CAT-COW POSE (Marjaryasana-Bitilasana)🐮 😺"
+          },
+          "Thread the Needle": {
+                "how": "בעמידת שש משחילים יד מתחת לגוף ומסובבים בעדינות את הגב העליון.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "Threading the needle - a thoracic spine stretch"
+          },
+          "Open Book Stretch": {
+                "how": "שוכבים על הצד ופותחים את היד העליונה לאחור כדי לסובב את בית החזה.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "Open Book Stretch - Physical Therapy Exercises"
+          },
+          "Shoulder CARs": {
+                "how": "מסובבים את הכתף במעגל איטי וגדול ככל האפשר בלי כאב.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "Increase Shoulder Mobility with Shoulder CARs"
+          },
+          "Wall Slides": {
+                "how": "נשענים על קיר ומחליקים את הידיים למעלה ולמטה תוך שמירה על שכמות פעילות.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "Easy fix for rounded shoulders - Scapula Wall Slides #mobility"
+          },
+          "90/90 Hip Switches": {
+                "how": "יושבים במנח 90/90 ומחליפים צדדים בשליטה בלי להרים את הגוף מהר מדי.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "90 90 Hip Switch"
+          },
+          "World’s Greatest Stretch": {
+                "how": "נכנסים למכרע קדמי, מוסיפים סיבוב חזה ומתיחה דינמית לירך ולגב.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "The World's Greatest Stretch (Mobility Exercise) by Squat University"
+          },
+          "Cossack Squat": {
+                "how": "יורדים לצד אחד בסקוואט צידי כשהרגל השנייה ישרה והעקב נשאר בשליטה.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "How to Cossack Squat Mobility Exercise: Tutorial & Progressions"
+          },
+          "Knee Over Toe": {
+                "how": "מניעים את הברך קדימה מעל כף הרגל בטווח נוח ומבוקר.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "The \"Knees Over Toes\" Approach For Fixing Knee Pain"
+          },
+          "Deep Squat Hold": {
+                "how": "יושבים בסקוואט עמוק ונוח ושומרים על נשימה ותנוחה יציבה.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "How to Do a Deep Squat According to Physical Therapists"
+          },
+          "Child’s Pose": {
+                "how": "יושבים לאחור לכיוון העקבים ומאריכים ידיים קדימה לנשימה רגועה.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "Child Pose"
+          },
+          "Downward Dog": {
+                "how": "מרימים אגן למעלה, דוחפים ידיים לרצפה ומאריכים גב ורגליים.",
+                "helps": "עוזר להגדיל טווח תנועה שימושי לפני אימונים ובשגרה.",
+                "source": "How to do Downward Facing Dog | Yoga for Beginners Pose Tutorial"
+          },
+          "Plank": {
+                "how": "מחזיקים גוף ישר על אמות או ידיים, עם בטן אסופה ואגן יציב.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "Core Exercise: Plank"
+          },
+          "Side Plank": {
+                "how": "מחזיקים את הגוף בקו ישר על צד אחד, על אמה או כף יד.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "Core Exercise: Side Plank"
+          },
+          "Dead Bug": {
+                "how": "שוכבים על הגב ומורידים יד ורגל נגדית תוך שמירה על גב יציב.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "Dead Bug Exercise For Core Stability  | Pursuit Physical Therapy"
+          },
+          "Bird Dog": {
+                "how": "בעמידת שש שולחים יד ורגל נגדית ושומרים על אגן יציב.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "Bird Dog Exercise | Improve Your Core and Balance"
+          },
+          "Single Leg Glute Bridge": {
+                "how": "שוכבים על הגב ומרימים אגן עם רגל אחת עובדת בכל פעם.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "Single Leg Glute Bridge"
+          },
+          "Single Leg Romanian Deadlift": {
+                "how": "נשענים קדימה על רגל אחת עם גב ניטרלי וחוזרים לעמידה בשליטה.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "The BEST Single-Leg RDL Tutorial (Romanian Deadlift)"
+          },
+          "Single Leg Squat": {
+                "how": "יורדים לסקוואט על רגל אחת בטווח שמאפשר שליטה בברך ובאגן.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "How To Single Leg Squat | Exercise Tutorial"
+          },
+          "Scapular Pull-up": {
+                "how": "נתלים על מתח ומעלים/מורידים את הגוף בעזרת תנועת שכמות בלבד.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "Scapular Pull Ups (Beginner to Advanced Progressions)"
+          },
+          "Wall Angels": {
+                "how": "נשענים על קיר ומחליקים ידיים כמו צורת מלאך תוך שמירה על גב ושכמות.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "How to Perform Wall Angel for Tight Upper Back"
+          },
+          "Farmer Carry": {
+                "how": "הולכים עם משקל בכל יד ושומרים על גוף זקוף וכתפיים יציבות.",
+                "helps": "עוזר לשפר שליטה בגוף, יציבות מפרקים ועמידות בעייפות.",
+                "source": "How to Perform the Farmer’s Carry"
+          },
+          "Hip Flexor Stretch": {
+                "how": "נכנסים למכרע כריעה ומטים אגן מעט לאחור עד שמרגישים מתיחה בקדמת הירך.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "How to do a hip flexor stretch | Bupa Health"
+          },
+          "Quad Stretch": {
+                "how": "מקרבים עקב לישבן ומחזיקים את הברך מתחת לאגן בלי קשת מוגזמת בגב.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "How to do a Quadriceps stretch | Bupa Health"
+          },
+          "Hamstring Stretch": {
+                "how": "מאריכים רגל קדימה ומתכופפים מהאגן עד מתיחה מאחורי הירך.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "How to do a hamstring stretch | Bupa Health"
+          },
+          "Calf Stretch": {
+                "how": "נשענים קדימה מול קיר כשהעקב האחורי נשאר על הרצפה.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "Standing Calf Stretch (HSS)"
+          },
+          "Doorway Chest Stretch": {
+                "how": "מניחים אמה על משקוף ומסובבים גוף בעדינות לפתיחת החזה.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "How to Do a Doorway Pec Stretch Exercise | 90 Degrees Abduction | MedBridge"
+          },
+          "Lat Stretch": {
+                "how": "אוחזים בנקודת עיגון או נשענים קדימה ומאריכים את הצד של הגב והכתף.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "Lat Stretches & Exercises (Latissimus dorsi) - Ask Doctor Jo"
+          },
+          "Rear Shoulder Stretch": {
+                "how": "מעבירים יד לרוחב החזה ומושכים בעדינות למתיחת הכתף האחורית.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "Shoulder Impingement? Do These Shoulder Mobility Exercises (For Posterior Capsule)"
+          },
+          "Neck Stretch": {
+                "how": "מטים את הראש בעדינות לצד או קדימה ושומרים על כתפיים רפויות.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "FAST Neck Pain Relief! [5-Minute Follow-Along Stretches]"
+          },
+          "Pigeon Pose": {
+                "how": "מביאים רגל קדמית כפופה לפני הגוף ומאריכים את הרגל השנייה לאחור.",
+                "helps": "עוזר להפחית נוקשות ולשמור על טווח תנועה נוח.",
+                "source": "PIGEON STRETCH"
+          },
+          "Band External Rotation": {
+                "how": "מסובבים את האמה החוצה נגד גומייה כשהמרפק צמוד לצד הגוף.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Banded Shoulder External Rotation | Band | Strength and Conditioning Exercises"
+          },
+          "Band Face Pull": {
+                "how": "מושכים גומייה לכיוון הפנים עם מרפקים גבוהים ושכמות עובדות.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Onnit Tutorials | Banded Face Pull Exercise"
+          },
+          "Band Pull Apart": {
+                "how": "מחזיקים גומייה בגובה החזה ומושכים ידיים לצדדים בשליטה.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "How To Do Banded Pull-Aparts"
+          },
+          "Y-T-W Raises": {
+                "how": "שוכבים או נשענים קדימה ומרימים ידיים בצורות Y, T ו-W.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Prone Y T W"
+          },
+          "Single Leg Balance": {
+                "how": "עומדים על רגל אחת ושומרים על יציבות בלי קריסת ברך או אגן.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Single Leg Balance Exercise"
+          },
+          "Heel Raises": {
+                "how": "עולים על קצות האצבעות ויורדים בשליטה דרך הקרסול.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Standing Heel Raises Stretch - Physical Therapy Exercises"
+          },
+          "Tibialis Raises": {
+                "how": "נשענים לאחור ומרימים את כפות הרגליים כלפי השוק.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "The Muscle Most People Ignore in Lower-Body Strength"
+          },
+          "Clamshell": {
+                "how": "שוכבים על הצד, ברכיים כפופות, ופותחים את הברך העליונה בלי לסובב אגן.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Side Lying Clam Shell"
+          },
+          "Monster Walk": {
+                "how": "צועדים הצידה או באלכסון עם גומייה סביב הרגליים ושומרים על ברכיים יציבות.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Monster Walk Exercise Demonstration"
+          },
+          "Copenhagen Plank": {
+                "how": "מחזיקים פלאנק צד כשהרגל העליונה נתמכת על ספסל או משטח.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Copenhagen Plank"
+          },
+          "Toe Yoga": {
+                "how": "מרימים ומורידים בהונות בנפרד כדי לשלוט בכף הרגל.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "How to Do a Toe Yoga Exercise: A Guide from Physical Therapists"
+          },
+          "Short Foot Exercise": {
+                "how": "מקצרים בעדינות את קשת כף הרגל בלי לכווץ את האצבעות.",
+                "helps": "עוזר לחזק אזורים חלשים ולהפחית עומסי יתר נפוצים.",
+                "source": "Short foot exercise"
+          },
+          "Diaphragmatic Breathing": {
+                "how": "נושמים דרך הסרעפת כך שהבטן והצלעות מתרחבות בעדינות.",
+                "helps": "עוזר לוויסות מאמץ, רגיעה והתאוששות אחרי אימונים.",
+                "source": "How to do Diaphragmatic Breathing Exercises for Beginners"
+          },
+          "Box Breathing": {
+                "how": "שואפים, מחזיקים, נושפים ומחזיקים שוב בפרקי זמן שווים.",
+                "helps": "עוזר לוויסות מאמץ, רגיעה והתאוששות אחרי אימונים.",
+                "source": "Box Breathing Exercise | TAKE A DEEP BREATH | Pranayama Series"
+          },
+          "Physiological Sigh": {
+                "how": "מבצעים שאיפה כפולה קצרה ואז נשיפה ארוכה ואיטית.",
+                "helps": "עוזר לוויסות מאמץ, רגיעה והתאוששות אחרי אימונים.",
+                "source": "Breathing Techniques to Reduce Stress and Anxiety — Dr. Andrew Huberman on the Physiological Sigh"
+          },
+          "Extended Exhale Breathing": {
+                "how": "נושפים זמן ארוך יותר מהשאיפה ושומרים על קצב רגוע.",
+                "helps": "עוזר לוויסות מאמץ, רגיעה והתאוששות אחרי אימונים.",
+                "source": "Breathing Technique for Anxiety and Focus: Practice Extended Exhale with Dora Kamau"
+          },
+          "CO₂ Tolerance Training": {
+                "how": "מתרגלים נשימה והחזקות נשימה קצרות לפי פרוטוקול מדורג.",
+                "helps": "עוזר לוויסות מאמץ, רגיעה והתאוששות אחרי אימונים.",
+                "source": "CO2 Tolerance Training - GRADUATE - 1:15 holds"
+          },
+          "POWERbreathe Training": {
+                "how": "משתמשים במכשיר POWERbreathe לנשימה נגד התנגדות לפי ההדרכה.",
+                "helps": "עוזר לוויסות מאמץ, רגיעה והתאוששות אחרי אימונים.",
+                "source": "POWERbreathe IMT - How To Perform The Correct Breathing Technique"
+          },
+          "Crocodile Breathing": {
+                "how": "שוכבים על הבטן ונושמים כך שהבטן והצלעות דוחפות בעדינות לרצפה.",
+                "helps": "עוזר לוויסות מאמץ, רגיעה והתאוששות אחרי אימונים.",
+                "source": "Crocodile Breathing Exercise"
+          },
+          "Active Recovery Walk": {
+                "how": "יוצאים להליכה קלה בקצב נוח שמאפשר שיחה.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Why You Need To Do Active Recovery!"
+          },
+          "Recovery Ride": {
+                "how": "רוכבים קל מאוד בעומס נמוך וקאדנס נוח.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "The Best Cycling Recovery Tips"
+          },
+          "Recovery Swim": {
+                "how": "שוחים קל, רגוע וטכני בלי מאמץ גבוה.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "The 6 Step Recovery Protocol Every Swimmer Needs"
+          },
+          "Foam Roller": {
+                "how": "מעבירים גליל עיסוי באיטיות על השריר בלי ללחוץ על מפרקים.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "10min FOAM ROLL FOR RUNNERS | Pre or Post Run Foam Roller Exercises"
+          },
+          "Lacrosse Ball Massage": {
+                "how": "מניחים כדור עיסוי על נקודות תפוסות ולוחצים בעדינות.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Full body trigger point  & myofascial release with balls - total body massage - James Tang Fitness"
+          },
+          "Massage Gun": {
+                "how": "מעבירים אקדח עיסוי על שרירים גדולים בעוצמה נוחה וקצרה.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "How To Use A Massage Gun On Your Legs For Recovery (& Rehab)"
+          },
+          "Legs Up the Wall": {
+                "how": "שוכבים על הגב ומניחים רגליים על הקיר למנוחה רגועה.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "After Weekend Recovery Tip Legs up the Wall Pose"
+          },
+          "Compression Socks": {
+                "how": "לובשים גרבי לחץ לאחר אימון או בנסיעה לפי תחושת נוחות.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Do Compression Socks Improve Athletic Performance?"
+          },
+          "Ice Bath": {
+                "how": "נכנסים למים קרים לזמן קצר ומבוקר בהתאם לסבילות האישית.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Ice Baths for Athletes | The Benefits and Side Effects"
+          },
+          "Sauna": {
+                "how": "יושבים בסאונה בפרק זמן מבוקר ומקפידים על שתייה והתאוששות.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Recover Smarter, Run Harder: The Sauna Advantage for Runners"
+          },
+          "Electrolyte Recovery": {
+                "how": "מחזירים נוזלים ואלקטרוליטים אחרי הזעה או אימון ארוך.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Electrolytes Explained: Boost Athletic Performance & Recovery"
+          },
+          "Post Workout Nutrition": {
+                "how": "אוכלים אחרי אימון שילוב של פחמימות וחלבון לפי הצורך.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Top 5 Recovery Foods for Athletes"
+          },
+          "Sleep": {
+                "how": "נותנים עדיפות לשינה מספקת ועקבית כחלק מתוכנית האימון.",
+                "helps": "עוזר להוריד עומס, להחזיר נוזלים ואנרגיה ולשפר מוכנות.",
+                "source": "Sleep and Your Performance: More than 53% of Athletes Get This Wrong"
+          },
+          "Squat": {
+                "how": "יורדים לסקוואט עם גב יציב וברכיים עוקבות אחרי כיוון כפות הרגליים.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "Exercise Tutorial - Squat"
+          },
+          "Deadlift": {
+                "how": "מרימים משקל מהרצפה בתנועת ציר ירך עם גב ניטרלי ומוט קרוב לגוף.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How to PROPERLY Deadlift for Growth (5 Easy Steps)"
+          },
+          "Romanian Deadlift": {
+                "how": "מורידים משקל לאורך הירכיים בציר ירך עד מתיחה בהמסטרינג וחוזרים לעמידה.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "Stop F*cking Up RDL's (PROPER FORM!)"
+          },
+          "Bulgarian Split Squat": {
+                "how": "מניחים רגל אחורית על ספסל ויורדים למכרע על הרגל הקדמית.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "Stop F*cking Up Bulgarian Split Squats (PROPER FORM!)"
+          },
+          "Walking Lunge": {
+                "how": "צועדים למכרעים קדימה ושומרים על ברך ואגן יציבים.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "Walking Lunges Exercise Tutorial | Build Legendary Legs & Cardio"
+          },
+          "Bench Press": {
+                "how": "לוחצים משקל מהחזה למעלה בשכיבה ושומרים על שכמות יציבות.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How to PROPERLY Bench Press for Growth (5 Easy Steps)"
+          },
+          "Incline Dumbbell Press": {
+                "how": "לוחצים משקולות בשיפוע חיובי מהחזה לכיוון מעלה.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How to do the INCLINE DUMBBELL BENCH PRESS! | 2 Minute Tutorial"
+          },
+          "Pull-up": {
+                "how": "נתלים על מתח ומושכים את הגוף למעלה עד שהסנטר עובר את המוט.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "The Perfect Pull Up  - Do it right!"
+          },
+          "Lat Pulldown": {
+                "how": "מושכים מוט פולי עליון לכיוון החזה עם גב יציב ושכמות פעילות.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How to do Lat Pulldowns (AVOID MISTAKES!)"
+          },
+          "Seated Row": {
+                "how": "מושכים ידית חתירה אל הגוף בישיבה ושומרים על חזה פתוח.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "Seated Cable Row | Exercise Guide"
+          },
+          "Overhead Press": {
+                "how": "לוחצים משקל מעל הראש בקו יציב בלי להקשית את הגב.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How to do the BARBELL OVERHEAD 'MILITARY' PRESS! | 2 Minute Tutorial"
+          },
+          "Lateral Raise": {
+                "how": "מרימים משקולות לצדדים עד גובה כתפיים בשליטה.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How to do the DUMBBELL LATERAL RAISE! | 2 Minute Tutorial"
+          },
+          "Biceps Curl": {
+                "how": "מכופפים מרפקים ומרימים משקל בלי להזיז את הכתפיים קדימה.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How To Do A Bicep Curl | The Right Way | Well+Good"
+          },
+          "Triceps Pushdown": {
+                "how": "דוחפים ידית פולי מטה עד יישור מרפקים כשהמרפקים צמודים.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "How To: Tricep Pushdown (Life Fitness Cable)"
+          },
+          "Hanging Leg Raise": {
+                "how": "נתלים ומרימים ברכיים או רגליים בשליטה בלי תנופה.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "Hanging leg raise tutorial"
+          },
+          "Cable Wood Chop": {
+                "how": "מסובבים את פלג הגוף נגד כבל באלכסון תוך שמירה על אגן יציב.",
+                "helps": "עוזר לבנות כוח כללי ועמידות לדרישות שחייה, רכיבה וריצה.",
+                "source": "HOW TO: Cable Wood Chop"
+          },
+          "Push-up": {
+                "how": "יורדים ועולים בשכיבת סמיכה עם גוף ישר ומרפקים בשליטה.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "The Perfect Push Up | Do it right!"
+          },
+          "Chin-up": {
+                "how": "נתלים באחיזה תחתית ומושכים את הגוף למעלה עד הסנטר מעל המוט.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "PERFECT CHIN-UPS | The Only Chin-up Tutorial You'll Ever Need (Full Guide)"
+          },
+          "Dip": {
+                "how": "יורדים ועולים על מקבילים עם כתפיים יציבות ומרפקים בשליטה.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "The Perfect Dip  - Do it right"
+          },
+          "Australian Row": {
+                "how": "מושכים את הגוף אל מוט נמוך כשהגוף בקו ישר.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "Calisthenics BEGINNER TUTORIAL (Part 4) - Body rows/Australian Pullups | Daaz Calisthenics 2019"
+          },
+          "Pike Push-up": {
+                "how": "מבצעים שכיבת סמיכה במנח פייק כדי לדחוף יותר דרך הכתפיים.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "How to Master the Pike Pushup (Tutorial + Progressions)"
+          },
+          "Handstand": {
+                "how": "מתרגלים עמידת ידיים מול קיר או חופשי עם גוף מיושר.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "How to Handstand - Absolute Beginners to Pro"
+          },
+          "Handstand Push-up": {
+                "how": "מבצעים כפיפה ולחיצה בעמידת ידיים, לרוב בהתקדמות מדורגת.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "Handstand Push Up Tutorial | Intermediate Calisthenics"
+          },
+          "Muscle-up": {
+                "how": "משלבים משיכת מתח חזקה, מעבר מעל המוט ודחיפה למעלה.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "How To Muscle-Up For Beginners (BEST EXERCISES)"
+          },
+          "Front Lever": {
+                "how": "נתלים ומחזיקים את הגוף אופקי לפנים בהתקדמות מדורגת.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "HOW TO DO FRONT LEVER? You should start from this video"
+          },
+          "Back Lever": {
+                "how": "נתלים ומחזיקים את הגוף אופקי לאחור בהתקדמות מדורגת.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "Back Lever Tutorial | Calisthenics for Beginner"
+          },
+          "Planche": {
+                "how": "מתקדמים בהישענות קדימה על הידיים עד החזקת גוף באוויר.",
+                "helps": "עוזר לבנות כוח יחסי, שליטה ומיומנות במשקל גוף.",
+                "source": "Planche Tutorial | How to start training Planche in 2024"
+          }
+    };
+
     const publicImages = {
       swim: 'https://commons.wikimedia.org/wiki/Special:FilePath/Competition%20swimming%20pool%20block.jpg',
       bike: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cycling%20kit%20full%20body.jpg',
@@ -442,6 +1000,11 @@
         const displayTitle = cleanTitle(title);
 
         const videoId = youtubeVideos[title];
+        const guide = exerciseGuides[title] || {
+          how: 'מבצעים לפי ההדגמה בסרטון המקושר.',
+          helps: defaults.desc,
+          source: displayTitle
+        };
 
         return {
           title,
@@ -453,7 +1016,10 @@
           sets: defaults.sets,
           youtube: videoId ? 'https://www.youtube.com/watch?v=' + videoId : youtubeSearchUrl(displayTitle),
           image: videoId ? 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg' : imageForExercise(type, sport),
-          desc: defaults.desc
+          desc: defaults.desc,
+          how: guide.how,
+          helps: guide.helps,
+          source: guide.source
         };
       });
 
@@ -510,6 +1076,11 @@
             </div>
             <h2>${exercise.title}</h2>
             <p class="desc">${exercise.desc}</p>
+            <div class="guide-lines">
+              <p><strong>מה עושים:</strong> ${exercise.how}</p>
+              <p><strong>עוזר ל:</strong> ${exercise.helps}</p>
+              <p class="source-line"><strong>מקור:</strong> ${exercise.source}</p>
+            </div>
             <dl>
               <dt>פעמים ביום</dt>
               <dd>${exercise.timesDay}</dd>
