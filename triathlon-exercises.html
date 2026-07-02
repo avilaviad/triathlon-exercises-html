@@ -55,7 +55,7 @@
 
     .controls {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
       gap: 12px;
       align-items: end;
       padding: 18px 0;
@@ -211,7 +211,7 @@
 <body>
   <header>
     <div class="wrap">
-      <h1>Triathlon Exercise Library</h1>
+      <h1>ספריית תרגילי טריאתלון</h1>
       <p class="intro">רשימת תרגילים לטריאתלון לפי קטגוריה. ההמלצות כלליות: לעבוד בטווח ללא כאב ולהתאים עומס עם מאמן או איש מקצוע לפי הצורך.</p>
     </div>
   </header>
@@ -222,12 +222,16 @@
         <label for="typeFilter">בחר סוג תרגיל</label>
         <select id="typeFilter"></select>
       </div>
+      <div>
+        <label for="sportFilter">בחר ספורט</label>
+        <select id="sportFilter"></select>
+      </div>
       <div id="resultCount" class="count" aria-live="polite"></div>
     </section>
 
     <section id="exerciseGrid" class="grid" aria-label="Exercise list"></section>
 
-    <p class="note">התמונות הן איור פשוט. קישורי YouTube פותחים חיפוש לתרגיל.</p>
+    <p class="note">התמונות מגיעות ממקורות ציבוריים כשיש התאמה טובה. אם אין תמונה מתאימה, מוצג ה-placeholder הקיים.</p>
   </main>
 
   <script>
@@ -235,58 +239,58 @@
 
     const categoryDefaults = {
       'טכניקה': {
-        timesDay: '1 time on relevant training days',
-        sets: '4-8 easy reps or 4-8 x 20-30 sec',
-        when: 'Before the main workout',
-        desc: 'Technique practice for cleaner, more efficient movement.'
+        timesDay: 'פעם אחת בימי אימון רלוונטיים',
+        sets: '4-8 חזרות קלות או 4-8 פעמים של 20-30 שניות',
+        when: 'לפני החלק המרכזי של האימון',
+        desc: 'תרגול טכניקה לתנועה יעילה ונקייה יותר.'
       },
       'מוביליות': {
-        timesDay: '1 time a day',
-        sets: '2 sets x 6-10 slow reps',
-        when: 'Morning or warm-up',
-        desc: 'Mobility work to improve comfortable range of motion.'
+        timesDay: 'פעם אחת ביום',
+        sets: '2 סטים של 6-10 חזרות איטיות',
+        when: 'בבוקר או בחימום',
+        desc: 'עבודת מוביליות לשיפור טווח תנועה נוח.'
       },
       'יציבות': {
-        timesDay: '1 time a day',
-        sets: '2-3 sets x 20-40 sec or 8-12 reps',
-        when: 'Warm-up or strength session',
-        desc: 'Stability work for better control under fatigue.'
+        timesDay: 'פעם אחת ביום',
+        sets: '2-3 סטים של 20-40 שניות או 8-12 חזרות',
+        when: 'בחימום או באימון כוח',
+        desc: 'עבודת יציבות לשליטה טובה יותר בעייפות.'
       },
       'מתיחות': {
-        timesDay: '1 time a day',
-        sets: '2 sets x 30-45 sec each side',
-        when: 'After training or evening',
-        desc: 'Stretching to reduce stiffness and maintain training positions.'
+        timesDay: 'פעם אחת ביום',
+        sets: '2 סטים של 30-45 שניות לכל צד',
+        when: 'אחרי אימון או בערב',
+        desc: 'מתיחות להפחתת נוקשות ושמירה על תנוחות אימון.'
       },
       'Prehab': {
-        timesDay: '1 time a day',
-        sets: '2-3 sets x 10-15 controlled reps',
-        when: 'Before training or strength',
-        desc: 'Prehab work for common triathlon overuse areas.'
+        timesDay: 'פעם אחת ביום',
+        sets: '2-3 סטים של 10-15 חזרות מבוקרות',
+        when: 'לפני אימון או באימון כוח',
+        desc: 'עבודת מניעה לאזורים נפוצים של עומס יתר בטריאתלון.'
       },
       'נשימה': {
-        timesDay: '1-3 times a day',
-        sets: '3-5 minutes',
-        when: 'Morning, post-workout, or before sleep',
-        desc: 'Breathing practice for control, recovery, and calm effort.'
+        timesDay: '1-3 פעמים ביום',
+        sets: '3-5 דקות',
+        when: 'בבוקר, אחרי אימון או לפני שינה',
+        desc: 'תרגול נשימה לשליטה, התאוששות ומאמץ רגוע.'
       },
       'התאוששות': {
-        timesDay: '1 time a day as needed',
-        sets: '5-20 minutes',
-        when: 'After training or evening',
-        desc: 'Recovery habit to support readiness between sessions.'
+        timesDay: 'פעם אחת ביום לפי צורך',
+        sets: '5-20 דקות',
+        when: 'אחרי אימון או בערב',
+        desc: 'הרגל התאוששות לשיפור מוכנות בין אימונים.'
       },
       'כוח': {
-        timesDay: '1 time on strength days',
-        sets: '3 sets x 6-12 reps',
-        when: 'Strength session',
-        desc: 'Strength work for durability and force production.'
+        timesDay: 'פעם אחת בימי כוח',
+        sets: '3 סטים של 6-12 חזרות',
+        when: 'באימון כוח',
+        desc: 'עבודת כוח לעמידות ולייצור כוח.'
       },
       'קליסטניקס': {
-        timesDay: '1 time on strength days',
-        sets: '3 sets x 3-10 quality reps',
-        when: 'Strength or skill session',
-        desc: 'Bodyweight strength and skill practice.'
+        timesDay: 'פעם אחת בימי כוח',
+        sets: '3 סטים של 3-10 חזרות איכותיות',
+        when: 'באימון כוח או מיומנות',
+        desc: 'תרגול כוח ומיומנות במשקל גוף.'
       }
     };
 
@@ -304,6 +308,19 @@
 
     const youtubeSearchUrl = (title) =>
       'https://www.youtube.com/results?search_query=' + encodeURIComponent(title + ' exercise tutorial');
+
+    const publicImages = {
+      swim: 'https://commons.wikimedia.org/wiki/Special:FilePath/Competition%20swimming%20pool%20block.jpg',
+      bike: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cycling%20kit%20full%20body.jpg',
+      run: 'https://commons.wikimedia.org/wiki/Special:FilePath/All-weather%20running%20track.jpg'
+    };
+
+    const imageForExercise = (type, sport) => {
+      if (sport === 'שחייה') return publicImages.swim;
+      if (sport === 'רכיבה') return publicImages.bike;
+      if (sport === 'ריצה') return publicImages.run;
+      return '';
+    };
 
     const exercises = exerciseRows
       .trim()
@@ -323,16 +340,19 @@
           timesDay: defaults.timesDay,
           sets: defaults.sets,
           youtube: youtubeSearchUrl(displayTitle),
-          image: '',
+          image: imageForExercise(type, sport),
           desc: defaults.desc
         };
       });
 
     const typeFilter = document.querySelector('#typeFilter');
+    const sportFilter = document.querySelector('#sportFilter');
     const grid = document.querySelector('#exerciseGrid');
     const resultCount = document.querySelector('#resultCount');
     const allTypesValue = 'All';
     const types = [allTypesValue, ...Array.from(new Set(exercises.map((exercise) => exercise.type)))];
+    const allSportsValue = 'All';
+    const sports = [allSportsValue, 'שחייה', 'רכיבה', 'ריצה', 'כללי'];
 
     function svgImage(exercise) {
       const svg = `
@@ -356,9 +376,12 @@
 
     function render() {
       const selectedType = typeFilter.value;
-      const visible = selectedType === allTypesValue
-        ? exercises
-        : exercises.filter((exercise) => exercise.type === selectedType);
+      const selectedSport = sportFilter.value;
+      const visible = exercises.filter((exercise) => {
+        const matchesType = selectedType === allTypesValue || exercise.type === selectedType;
+        const matchesSport = selectedSport === allSportsValue || exercise.sport === selectedSport;
+        return matchesType && matchesSport;
+      });
 
       grid.innerHTML = '';
       resultCount.textContent = `${visible.length} תרגילים`;
@@ -376,11 +399,11 @@
             <h2>${exercise.title}</h2>
             <p class="desc">${exercise.desc}</p>
             <dl>
-              <dt>Times/day</dt>
+              <dt>פעמים ביום</dt>
               <dd>${exercise.timesDay}</dd>
-              <dt>Sets</dt>
+              <dt>סטים</dt>
               <dd>${exercise.sets}</dd>
-              <dt>When</dt>
+              <dt>מתי</dt>
               <dd>${exercise.when}</dd>
             </dl>
             <a href="${exercise.youtube}" target="_blank" rel="noopener">פתח YouTube</a>
@@ -391,7 +414,9 @@
     }
 
     types.forEach((type) => typeFilter.appendChild(option(type, type === allTypesValue ? 'הכל' : type)));
+    sports.forEach((sport) => sportFilter.appendChild(option(sport, sport === allSportsValue ? 'הכל' : sport)));
     typeFilter.addEventListener('change', render);
+    sportFilter.addEventListener('change', render);
     render();
   </script>
 </body>
