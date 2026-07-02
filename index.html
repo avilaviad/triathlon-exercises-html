@@ -211,6 +211,38 @@
       background: #0b5f59;
     }
 
+    .back-to-top {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
+      min-height: 46px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 10px 24px rgba(15, 118, 110, 0.28);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 160ms ease, transform 160ms ease, background 160ms ease;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover,
+    .back-to-top:focus-visible {
+      background: #0b5f59;
+    }
+
     .note {
       padding: 14px 0 28px;
       color: var(--muted);
@@ -253,6 +285,8 @@
 
     <p class="note">התמונות מגיעות ממקורות ציבוריים כשיש התאמה טובה. אם אין תמונה מתאימה, מוצג ה-placeholder הקיים.</p>
   </main>
+
+  <button id="backToTop" class="back-to-top" type="button" aria-label="קח אותי למעלה">קח אותי למעלה</button>
 
   <script>
     const exerciseRows = "טכניקה\tשחייה – Catch-Up Drill\nטכניקה\tשחייה – Fingertip Drag\nטכניקה\tשחייה – Single Arm Drill\nטכניקה\tשחייה – Sculling\nטכניקה\tשחייה – 6-1-6 Drill\nטכניקה\tשחייה – Tarzan Drill\nטכניקה\tרכיבה – High Cadence Drill\nטכניקה\tרכיבה – Single Leg Drill\nטכניקה\tרכיבה – Cornering Practice\nטכניקה\tרכיבה – Emergency Braking\nטכניקה\tרכיבה – Bottle Pick-Up\nטכניקה\tריצה – A-Skip\nטכניקה\tריצה – B-Skip\nטכניקה\tריצה – High Knees\nטכניקה\tריצה – Butt Kicks\nטכניקה\tריצה – Bounding\nטכניקה\tריצה – Strides\nמוביליות\tCat-Cow\nמוביליות\tThread the Needle\nמוביליות\tOpen Book Stretch\nמוביליות\tShoulder CARs\nמוביליות\tWall Slides\nמוביליות\t90/90 Hip Switches\nמוביליות\tWorld’s Greatest Stretch\nמוביליות\tCossack Squat\nמוביליות\tKnee Over Toe\nמוביליות\tDeep Squat Hold\nמוביליות\tChild’s Pose\nמוביליות\tDownward Dog\nיציבות\tPlank\nיציבות\tSide Plank\nיציבות\tDead Bug\nיציבות\tBird Dog\nיציבות\tSingle Leg Glute Bridge\nיציבות\tSingle Leg Romanian Deadlift\nיציבות\tSingle Leg Squat\nיציבות\tScapular Pull-up\nיציבות\tWall Angels\nיציבות\tFarmer Carry\nמתיחות\tHip Flexor Stretch\nמתיחות\tQuad Stretch\nמתיחות\tHamstring Stretch\nמתיחות\tCalf Stretch\nמתיחות\tDoorway Chest Stretch\nמתיחות\tLat Stretch\nמתיחות\tRear Shoulder Stretch\nמתיחות\tNeck Stretch\nמתיחות\tPigeon Pose\nPrehab\tBand External Rotation\nPrehab\tBand Face Pull\nPrehab\tBand Pull Apart\nPrehab\tY-T-W Raises\nPrehab\tSingle Leg Balance\nPrehab\tHeel Raises\nPrehab\tTibialis Raises\nPrehab\tClamshell\nPrehab\tMonster Walk\nPrehab\tCopenhagen Plank\nPrehab\tToe Yoga\nPrehab\tShort Foot Exercise\nנשימה\tDiaphragmatic Breathing\nנשימה\tBox Breathing\nנשימה\tPhysiological Sigh\nנשימה\tExtended Exhale Breathing\nנשימה\tCO₂ Tolerance Training\nנשימה\tPOWERbreathe Training\nנשימה\tCrocodile Breathing\nהתאוששות\tActive Recovery Walk\nהתאוששות\tRecovery Ride\nהתאוששות\tRecovery Swim\nהתאוששות\tFoam Roller\nהתאוששות\tLacrosse Ball Massage\nהתאוששות\tMassage Gun\nהתאוששות\tLegs Up the Wall\nהתאוששות\tCompression Socks\nהתאוששות\tIce Bath\nהתאוששות\tSauna\nהתאוששות\tElectrolyte Recovery\nהתאוששות\tPost Workout Nutrition\nהתאוששות\tSleep\nכוח\tSquat\nכוח\tDeadlift\nכוח\tRomanian Deadlift\nכוח\tBulgarian Split Squat\nכוח\tWalking Lunge\nכוח\tBench Press\nכוח\tIncline Dumbbell Press\nכוח\tPull-up\nכוח\tLat Pulldown\nכוח\tSeated Row\nכוח\tOverhead Press\nכוח\tLateral Raise\nכוח\tBiceps Curl\nכוח\tTriceps Pushdown\nכוח\tHanging Leg Raise\nכוח\tCable Wood Chop\nקליסטניקס\tPush-up\nקליסטניקס\tPull-up\nקליסטניקס\tChin-up\nקליסטניקס\tDip\nקליסטניקס\tAustralian Row\nקליסטניקס\tPike Push-up\nקליסטניקס\tHandstand\nקליסטניקס\tHandstand Push-up\nקליסטניקס\tMuscle-up\nקליסטניקס\tFront Lever\nקליסטניקס\tBack Lever\nקליסטניקס\tPlanche";
@@ -1027,6 +1061,7 @@
     const sportFilter = document.querySelector('#sportFilter');
     const grid = document.querySelector('#exerciseGrid');
     const resultCount = document.querySelector('#resultCount');
+    const backToTop = document.querySelector('#backToTop');
     const allTypesValue = 'All';
     const types = [allTypesValue, ...Array.from(new Set(exercises.map((exercise) => exercise.type)))];
     const allSportsValue = 'All';
@@ -1100,6 +1135,12 @@
     sports.forEach((sport) => sportFilter.appendChild(option(sport, sport === allSportsValue ? 'הכל' : sport)));
     typeFilter.addEventListener('change', render);
     sportFilter.addEventListener('change', render);
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('visible', window.scrollY > 360);
+    });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
     render();
   </script>
 </body>
