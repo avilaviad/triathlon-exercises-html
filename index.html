@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Triathlon Exercise Library</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #5f6f7b;
+      --line: #d9e2e8;
+      --panel: #ffffff;
+      --bg: #f3f7f9;
+      --accent: #0f766e;
+      --accent-2: #b45309;
+      --chip: #e9f3f1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.45;
+    }
+
+    header {
+      padding: 28px 20px 18px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 5vw, 46px);
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 820px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: end;
+      padding: 18px 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #32424d;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    select {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink);
+      font-size: 16px;
+    }
+
+    .count {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel);
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 0 0 34px;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: 0 8px 20px rgba(21, 32, 43, 0.06);
+    }
+
+    .card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+      background: #dce8ed;
+    }
+
+    .card-body {
+      padding: 14px;
+    }
+
+    .topline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--chip);
+      color: #135e58;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pill.sport {
+      background: #f7ead8;
+      color: var(--accent-2);
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .desc {
+      min-height: 46px;
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    dl {
+      display: grid;
+      grid-template-columns: 98px 1fr;
+      gap: 7px 10px;
+      margin: 0 0 14px;
+      font-size: 14px;
+    }
+
+    dt {
+      color: #3b4a54;
+      font-weight: 700;
+    }
+
+    dd {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      width: 100%;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+      background: #0b5f59;
+    }
+
+    .note {
+      padding: 14px 0 28px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 620px) {
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .count {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Triathlon Exercise Library</h1>
+      <p class="intro">Simple starter list for swim, cycle, run, and general triathlon support. Use pain-free ranges and adjust volume with a qualified coach or clinician if needed.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="controls" aria-label="Exercise filters">
+      <div>
+        <label for="typeFilter">Choose exercise type</label>
+        <select id="typeFilter"></select>
+      </div>
+      <div id="resultCount" class="count" aria-live="polite"></div>
+    </section>
+
+    <section id="exerciseGrid" class="grid" aria-label="Exercise list"></section>
+
+    <p class="note">Images use YouTube thumbnails when a direct video is linked. Search links open YouTube results for the exercise.</p>
+  </main>
+
+  <script>
+    const exercises = [
+      {
+        title: 'Freestyle Catch-Up Drill',
+        type: 'Technique',
+        sport: 'Swim',
+        when: 'Before swim main set',
+        timesDay: '1 time on swim days',
+        sets: '6 x 25 m easy',
+        youtube: 'https://www.youtube.com/watch?v=UPOZidhYrlw',
+        image: 'https://img.youtube.com/vi/UPOZidhYrlw/hqdefault.jpg',
+        desc: 'Builds front-quadrant timing and smoother stroke rhythm.'
+      },
+      {
+        title: 'Single-Arm Freestyle Drill',
+        type: 'Technique',
+        sport: 'Swim',
+        when: 'Warm-up or technique block',
+        timesDay: '1 time on swim days',
+        sets: '4 x 25 m each side',
+        youtube: 'https://www.youtube.com/watch?v=_wzmFQ--lys',
+        image: 'https://img.youtube.com/vi/_wzmFQ--lys/hqdefault.jpg',
+        desc: 'Isolates the pull and rotation on each side.'
+      },
+      {
+        title: 'High Cadence Spin-Ups',
+        type: 'Technique',
+        sport: 'Cycle',
+        when: 'Bike warm-up',
+        timesDay: '1 time on bike days',
+        sets: '6 x 20 sec fast spin',
+        youtube: 'https://www.youtube.com/watch?v=rLkEJ1TudBk',
+        image: 'https://img.youtube.com/vi/rLkEJ1TudBk/hqdefault.jpg',
+        desc: 'Improves smooth pedaling without heavy force.'
+      },
+      {
+        title: 'A-Skip Drill',
+        type: 'Technique',
+        sport: 'Run',
+        when: 'Before easy run or intervals',
+        timesDay: '1 time on run days',
+        sets: '3 x 20 m',
+        youtube: 'https://www.youtube.com/watch?v=GQg9L28bi1g',
+        image: 'https://img.youtube.com/vi/GQg9L28bi1g/hqdefault.jpg',
+        desc: 'Reinforces upright posture, knee lift, and foot strike timing.'
+      },
+      {
+        title: 'Ankle Knee-to-Wall Mobilization',
+        type: 'Mobility',
+        sport: 'Run',
+        when: 'Before run or strength',
+        timesDay: '1-2 times a day',
+        sets: '2 sets x 10 reps each side',
+        youtube: 'https://www.youtube.com/watch?v=ElrpduJn92Y',
+        image: 'https://img.youtube.com/vi/ElrpduJn92Y/hqdefault.jpg',
+        desc: 'Improves ankle dorsiflexion for running and squatting.'
+      },
+      {
+        title: 'Hip 90/90 Switches',
+        type: 'Mobility',
+        sport: 'Run',
+        when: 'Morning or pre-run',
+        timesDay: '1 time a day',
+        sets: '2 sets x 8 reps each side',
+        youtube: 'https://www.youtube.com/watch?v=m51AZSXMvEA',
+        image: 'https://img.youtube.com/vi/m51AZSXMvEA/hqdefault.jpg',
+        desc: 'Opens hip rotation for stride mechanics.'
+      },
+      {
+        title: 'Thoracic Open Book Rotation',
+        type: 'Mobility',
+        sport: 'Swim',
+        when: 'Morning or before swim',
+        timesDay: '1 time a day',
+        sets: '2 sets x 8 reps each side',
+        youtube: 'https://www.youtube.com/watch?v=peeW19ofFUg',
+        image: 'https://img.youtube.com/vi/peeW19ofFUg/hqdefault.jpg',
+        desc: 'Restores upper-back rotation for breathing and reach.'
+      },
+      {
+        title: 'Shoulder CARs',
+        type: 'Mobility',
+        sport: 'Swim',
+        when: 'Before swim or strength',
+        timesDay: '1 time a day',
+        sets: '2 sets x 5 slow circles each way',
+        youtube: 'https://www.youtube.com/watch?v=9FFiaMIkcNY',
+        image: 'https://img.youtube.com/vi/9FFiaMIkcNY/hqdefault.jpg',
+        desc: 'Builds controlled shoulder range for swim durability.'
+      },
+      {
+        title: 'Kneeling Hip Flexor Stretch',
+        type: 'Flexibility',
+        sport: 'Cycle',
+        when: 'After bike or evening',
+        timesDay: '1 time a day',
+        sets: '2 sets x 40 sec each side',
+        youtube: 'https://www.youtube.com/watch?v=34SlL-PPCWQ',
+        image: 'https://img.youtube.com/vi/34SlL-PPCWQ/hqdefault.jpg',
+        desc: 'Reduces hip-front tightness from long aero or seated riding.'
+      },
+      {
+        title: 'Hamstring Strap Stretch',
+        type: 'Flexibility',
+        sport: 'Run',
+        when: 'After run or evening',
+        timesDay: '1 time a day',
+        sets: '2 sets x 40 sec each side',
+        youtube: 'https://www.youtube.com/watch?v=Il1L75v6gq0',
+        image: 'https://img.youtube.com/vi/Il1L75v6gq0/hqdefault.jpg',
+        desc: 'Keeps posterior-chain range without aggressive pulling.'
+      },
+      {
+        title: 'Quad Couch Stretch',
+        type: 'Flexibility',
+        sport: 'Cycle',
+        when: 'Evening or after bike',
+        timesDay: '1 time a day',
+        sets: '2 sets x 30-45 sec each side',
+        youtube: 'https://www.youtube.com/watch?v=Fg-lwNBzVV8',
+        image: 'https://img.youtube.com/vi/Fg-lwNBzVV8/hqdefault.jpg',
+        desc: 'Targets quads and hip flexors after cycling.'
+      },
+      {
+        title: 'Standing Calf Stretch',
+        type: 'Flexibility',
+        sport: 'Run',
+        when: 'After run or before bed',
+        timesDay: '1-2 times a day',
+        sets: '2 sets x 45 sec each side',
+        youtube: 'https://www.youtube.com/watch?v=mafo7o7OnFo',
+        image: 'https://img.youtube.com/vi/mafo7o7OnFo/hqdefault.jpg',
+        desc: 'Maintains calf and Achilles tolerance for running.'
+      },
+      {
+        title: 'Worlds Greatest Stretch Flow',
+        type: 'Stretches',
+        sport: 'Run',
+        when: 'Before run or strength',
+        timesDay: '1 time on training days',
+        sets: '2 sets x 5 reps each side',
+        youtube: 'https://www.youtube.com/results?search_query=worlds+greatest+stretch+triathlon',
+        image: '',
+        desc: 'Combines hip, hamstring, and thoracic movement.'
+      },
+      {
+        title: 'Banded Lat Stretch',
+        type: 'Stretches',
+        sport: 'Swim',
+        when: 'After swim or evening',
+        timesDay: '1 time a day',
+        sets: '2 sets x 45 sec each side',
+        youtube: 'https://www.youtube.com/results?search_query=banded+lat+stretch+swimmer',
+        image: '',
+        desc: 'Eases lat and shoulder stiffness after swim volume.'
+      },
+      {
+        title: 'Adductor Rockback Stretch',
+        type: 'Stretches',
+        sport: 'Run',
+        when: 'Warm-up or recovery block',
+        timesDay: '1 time a day',
+        sets: '2 sets x 10 reps each side',
+        youtube: 'https://www.youtube.com/results?search_query=adductor+rockback+stretch',
+        image: '',
+        desc: 'Improves groin and hip comfort for running.'
+      },
+      {
+        title: 'Child Pose Breathing Stretch',
+        type: 'Stretches',
+        sport: 'General',
+        when: 'Evening recovery',
+        timesDay: '1 time a day',
+        sets: '2 sets x 6 slow breaths',
+        youtube: 'https://www.youtube.com/results?search_query=child+pose+breathing+stretch',
+        image: '',
+        desc: 'Combines gentle back stretch with downregulation.'
+      },
+      {
+        title: 'Box Breathing',
+        type: 'Breathing',
+        sport: 'General',
+        when: 'Morning, pre-race, or before sleep',
+        timesDay: '1-3 times a day',
+        sets: '4 rounds of 4-4-4-4 sec',
+        youtube: 'https://www.youtube.com/results?search_query=box+breathing+exercise',
+        image: '',
+        desc: 'Helps control stress and settle effort.'
+      },
+      {
+        title: 'Diaphragmatic Breathing',
+        type: 'Breathing',
+        sport: 'General',
+        when: 'Morning or after hard sessions',
+        timesDay: '1-2 times a day',
+        sets: '5 minutes',
+        youtube: 'https://www.youtube.com/results?search_query=diaphragmatic+breathing+exercise',
+        image: '',
+        desc: 'Encourages relaxed belly and rib breathing.'
+      },
+      {
+        title: 'Exhale-Focused Recovery Breathing',
+        type: 'Breathing',
+        sport: 'General',
+        when: 'Immediately after training',
+        timesDay: '1 time after hard sessions',
+        sets: '3-5 minutes',
+        youtube: 'https://www.youtube.com/results?search_query=long+exhale+recovery+breathing',
+        image: '',
+        desc: 'Uses longer exhales to shift into recovery.'
+      },
+      {
+        title: 'Bilateral Swim Breathing Drill',
+        type: 'Breathing',
+        sport: 'Swim',
+        when: 'Swim technique block',
+        timesDay: '1 time on swim days',
+        sets: '6 x 25 m easy',
+        youtube: 'https://www.youtube.com/results?search_query=bilateral+breathing+swim+drill',
+        image: '',
+        desc: 'Practices calm breathing rhythm on both sides.'
+      },
+      {
+        title: 'Band Pull-Aparts',
+        type: 'Prehab',
+        sport: 'Swim',
+        when: 'Before swim or strength',
+        timesDay: '1 time a day',
+        sets: '2-3 sets x 12-15 reps',
+        youtube: 'https://www.youtube.com/watch?v=3OYSIWaJJk4',
+        image: 'https://img.youtube.com/vi/3OYSIWaJJk4/hqdefault.jpg',
+        desc: 'Builds upper-back endurance for shoulder position.'
+      },
+      {
+        title: 'Tibialis Raises',
+        type: 'Prehab',
+        sport: 'Run',
+        when: 'After run or strength',
+        timesDay: '1 time a day',
+        sets: '2-3 sets x 15 reps',
+        youtube: 'https://www.youtube.com/watch?v=RHWRxiBe1iU',
+        image: 'https://img.youtube.com/vi/RHWRxiBe1iU/hqdefault.jpg',
+        desc: 'Supports shin and ankle capacity for running.'
+      },
+      {
+        title: 'Eccentric Calf Raises',
+        type: 'Prehab',
+        sport: 'Run',
+        when: 'After run or strength',
+        timesDay: '1 time a day',
+        sets: '3 sets x 8-12 reps each side',
+        youtube: 'https://www.youtube.com/watch?v=aD2NhWvuL8Y',
+        image: 'https://img.youtube.com/vi/aD2NhWvuL8Y/hqdefault.jpg',
+        desc: 'Builds calf and Achilles tissue tolerance.'
+      },
+      {
+        title: 'Clamshells',
+        type: 'Prehab',
+        sport: 'Run',
+        when: 'Before run or strength',
+        timesDay: '1 time a day',
+        sets: '2 sets x 12-15 reps each side',
+        youtube: 'https://www.youtube.com/watch?v=scAo-yWreY0',
+        image: 'https://img.youtube.com/vi/scAo-yWreY0/hqdefault.jpg',
+        desc: 'Targets hip external rotators for knee and pelvis control.'
+      },
+      {
+        title: 'Goblet Squat',
+        type: 'Strength',
+        sport: 'Cycle',
+        when: 'Strength session',
+        timesDay: '1 time on strength days',
+        sets: '3 sets x 6-10 reps',
+        youtube: 'https://www.youtube.com/results?search_query=goblet+squat+exercise',
+        image: '',
+        desc: 'Builds leg strength for cycling and running.'
+      },
+      {
+        title: 'Single-Leg Glute Bridge',
+        type: 'Strength',
+        sport: 'Run',
+        when: 'Strength or pre-run activation',
+        timesDay: '1 time a day',
+        sets: '2-3 sets x 8-12 reps each side',
+        youtube: 'https://www.youtube.com/watch?v=3NXv0Nany-Q',
+        image: 'https://img.youtube.com/vi/3NXv0Nany-Q/hqdefault.jpg',
+        desc: 'Improves hip extension and single-leg control.'
+      },
+      {
+        title: 'Pallof Press Hold',
+        type: 'Strength',
+        sport: 'General',
+        when: 'Strength session',
+        timesDay: '1 time on strength days',
+        sets: '3 sets x 20-30 sec each side',
+        youtube: 'https://www.youtube.com/watch?v=4G2Kj8Mc2WU',
+        image: 'https://img.youtube.com/vi/4G2Kj8Mc2WU/hqdefault.jpg',
+        desc: 'Trains anti-rotation core strength for all three sports.'
+      },
+      {
+        title: 'Dead Bug',
+        type: 'Strength',
+        sport: 'General',
+        when: 'Warm-up or strength session',
+        timesDay: '1 time a day',
+        sets: '2-3 sets x 8 reps each side',
+        youtube: 'https://www.youtube.com/watch?v=g_BYB0R-4Ws',
+        image: 'https://img.youtube.com/vi/g_BYB0R-4Ws/hqdefault.jpg',
+        desc: 'Builds trunk control without loading the spine heavily.'
+      },
+      {
+        title: 'Foam Roll Quads',
+        type: 'Recovery',
+        sport: 'Cycle',
+        when: 'After bike or evening',
+        timesDay: '1 time a day',
+        sets: '60-90 sec each side',
+        youtube: 'https://www.youtube.com/results?search_query=foam+roll+quads',
+        image: '',
+        desc: 'Helps reduce quad stiffness after cycling.'
+      },
+      {
+        title: 'Foam Roll Calves',
+        type: 'Recovery',
+        sport: 'Run',
+        when: 'After run or evening',
+        timesDay: '1 time a day',
+        sets: '60 sec each side',
+        youtube: 'https://www.youtube.com/results?search_query=foam+roll+calves',
+        image: '',
+        desc: 'Light recovery work for calves and lower legs.'
+      },
+      {
+        title: 'Legs-Up-the-Wall',
+        type: 'Recovery',
+        sport: 'General',
+        when: 'Evening or after long sessions',
+        timesDay: '1 time a day',
+        sets: '5-10 minutes',
+        youtube: 'https://www.youtube.com/results?search_query=legs+up+the+wall+recovery',
+        image: '',
+        desc: 'Easy downshift after long training days.'
+      },
+      {
+        title: 'Easy Walk Cooldown',
+        type: 'Recovery',
+        sport: 'Run',
+        when: 'Immediately after run',
+        timesDay: '1 time after runs',
+        sets: '5-10 minutes',
+        youtube: 'https://www.youtube.com/results?search_query=walking+cooldown+after+running',
+        image: '',
+        desc: 'Keeps circulation moving while effort returns to normal.'
+      }
+    ];
+
+    const typeFilter = document.querySelector('#typeFilter');
+    const grid = document.querySelector('#exerciseGrid');
+    const resultCount = document.querySelector('#resultCount');
+    const types = ['All', ...Array.from(new Set(exercises.map((exercise) => exercise.type)))];
+
+    function svgImage(exercise) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+          <rect width="640" height="360" fill="#e9f3f1"/>
+          <circle cx="106" cy="93" r="44" fill="#0f766e" opacity=".2"/>
+          <path d="M0 278 C120 230 205 320 330 264 C445 212 520 240 640 194 L640 360 L0 360 Z" fill="#b45309" opacity=".2"/>
+          <text x="48" y="170" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#17202a">${exercise.type}</text>
+          <text x="48" y="216" font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#5f6f7b">${exercise.sport}</text>
+        </svg>`;
+
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    }
+
+    function option(label) {
+      const item = document.createElement('option');
+      item.value = label;
+      item.textContent = label;
+      return item;
+    }
+
+    function render() {
+      const selectedType = typeFilter.value;
+      const visible = selectedType === 'All'
+        ? exercises
+        : exercises.filter((exercise) => exercise.type === selectedType);
+
+      grid.innerHTML = '';
+      resultCount.textContent = `${visible.length} exercises`;
+
+      visible.forEach((exercise) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${exercise.image || svgImage(exercise)}" alt="${exercise.title}">
+          <div class="card-body">
+            <div class="topline">
+              <span class="pill">${exercise.type}</span>
+              <span class="pill sport">${exercise.sport}</span>
+            </div>
+            <h2>${exercise.title}</h2>
+            <p class="desc">${exercise.desc}</p>
+            <dl>
+              <dt>Times/day</dt>
+              <dd>${exercise.timesDay}</dd>
+              <dt>Sets</dt>
+              <dd>${exercise.sets}</dd>
+              <dt>When</dt>
+              <dd>${exercise.when}</dd>
+            </dl>
+            <a href="${exercise.youtube}" target="_blank" rel="noopener">Open YouTube</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    types.forEach((type) => typeFilter.appendChild(option(type)));
+    typeFilter.addEventListener('change', render);
+    render();
+  </script>
+</body>
+</html>
