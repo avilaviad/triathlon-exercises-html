@@ -93,8 +93,10 @@ button {
 
 .bottom-nav {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+  overflow: hidden;
   padding: 10px;
   background: #ffffff;
   border-top: 1px solid #e2e8f0;
@@ -102,17 +104,27 @@ button {
 
 .nav-button {
   display: grid;
-  min-height: 52px;
+  min-width: 0;
+  min-height: 58px;
+  width: 100%;
+  align-content: center;
   place-items: center;
-  gap: 4px;
-  padding: 7px 4px;
+  gap: 3px;
+  padding: 6px 1px;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: #64748b;
   cursor: pointer;
-  font-size: 0.72rem;
+  font-size: 0.62rem;
   font-weight: 700;
+  line-height: 1.15;
+  text-align: center;
+}
+
+.nav-button span:last-child {
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .nav-button:focus-visible {
@@ -126,8 +138,8 @@ button {
 }
 
 .nav-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: currentColor;
 }

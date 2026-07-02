@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AppState, Exercise, ProgressLog, WeeklyPlan } from '../types';
 import {
   STORAGE_KEY,
@@ -63,7 +63,35 @@ describe('local app store', () => {
     localStorage.clear();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('returns the default app state when storage is empty', () => {
+    expect(loadAppState()).toEqual(createDefaultAppState());
+  });
+
+  it('creates independent arrays for each weekly plan day', () => {
+    const plan = createDefaultWeeklyPlan();
+
+    plan.monday.exerciseIds.push('built-in-run-drill');
+    plan.monday.preferredCategories.push('Mobility');
+
+    expect(plan.tuesday.exerciseIds).toEqual([]);
+    expect(plan.tuesday.preferredCategories).toEqual([]);
+  });
+
+  it('returns the default app state when saved storage is invalid JSON', () => {
+    localStorage.setItem(STORAGE_KEY, '{invalid-json');
+
+    expect(loadAppState()).toEqual(createDefaultAppState());
+  });
+
+  it('returns the default app state when local storage cannot be read', () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('Storage blocked');
+    });
+
     expect(loadAppState()).toEqual(createDefaultAppState());
   });
 
@@ -124,10 +152,18 @@ describe('local app store', () => {
   });
 
   it('uses one versioned local storage key', () => {
-    saveAppState(createDefaultAppState());
+    expect(saveAppState(createDefaultAppState())).toBe(true);
 
     expect(STORAGE_KEY).toBe('triathlon-library:v1');
     expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull();
     expect(localStorage.length).toBe(1);
+  });
+
+  it('returns false when local storage cannot be written', () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('Quota exceeded');
+    });
+
+    expect(saveAppState(createDefaultAppState())).toBe(false);
   });
 });
