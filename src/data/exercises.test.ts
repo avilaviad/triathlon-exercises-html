@@ -23,6 +23,7 @@ const isYoutubeSearchFallbackUrl = (value: string) =>
   /^https:\/\/(www\.)?youtube\.com\/results\?search_query=.+/.test(value);
 const isAllowedYoutubeUrl = (value: string) =>
   isDirectYoutubeUrl(value) || isYoutubeSearchFallbackUrl(value);
+const firstThreeWords = (value: string) => value.toLowerCase().split(/\s+/).slice(0, 3).join(' ');
 
 const genericGuidance: Record<
   ExerciseCategory,
@@ -139,7 +140,24 @@ describe('built-in exercise library', () => {
   });
 
   it('does not use generated title or description boilerplate as coaching guidance', () => {
+    const bannedPatterns = [
+      /^Improves .* carryover/,
+      /^Rushing .* until/,
+      /^Keep .* relaxed enough/,
+      /^Supports .* for /,
+      /^Avoid turning .* into/,
+      /^Use .* to reinforce/
+    ];
+
     for (const exercise of exercises) {
+      for (const guidance of [
+        ...exercise.benefits,
+        ...exercise.commonMistakes,
+        ...exercise.executionTips
+      ]) {
+        expect(bannedPatterns.some((pattern) => pattern.test(guidance))).toBe(false);
+      }
+
       expect(exercise.benefits.some((benefit) => benefit.startsWith('Reinforces '))).toBe(false);
       expect(
         exercise.commonMistakes.some((mistake) => mistake.startsWith('Missing the main goal of '))
@@ -159,6 +177,21 @@ describe('built-in exercise library', () => {
     expect(new Set(firstBenefits).size).toBe(exercises.length);
     expect(new Set(firstMistakes).size).toBe(exercises.length);
     expect(new Set(firstTips).size).toBe(exercises.length);
+  });
+
+  it('keeps first guidance phrasing diverse across the library', () => {
+    const fields = ['benefits', 'commonMistakes', 'executionTips'] as const;
+
+    for (const field of fields) {
+      const phraseCounts = new Map<string, number>();
+
+      for (const exercise of exercises) {
+        const phrase = firstThreeWords(exercise[field][0]);
+        phraseCounts.set(phrase, (phraseCounts.get(phrase) ?? 0) + 1);
+      }
+
+      expect(Math.max(...phraseCounts.values())).toBeLessThanOrEqual(5);
+    }
   });
 
   it('does not share mutable array references between exercises', () => {
