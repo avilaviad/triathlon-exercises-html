@@ -55,7 +55,7 @@
 
     .controls {
       display: grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+      grid-template-columns: minmax(180px, 1.2fr) minmax(160px, 1fr) minmax(160px, 1fr) auto;
       gap: 12px;
       align-items: end;
       padding: 18px 0;
@@ -70,7 +70,8 @@
       text-transform: uppercase;
     }
 
-    select {
+    select,
+    input[type="search"] {
       width: 100%;
       min-height: 44px;
       padding: 0 12px;
@@ -266,6 +267,10 @@
 
   <main class="wrap">
     <section class="controls" aria-label="Exercise filters">
+      <div>
+        <label for="searchInput">חיפוש חופשי</label>
+        <input id="searchInput" type="search" placeholder="שם תרגיל, קטגוריה או מטרה">
+      </div>
       <div>
         <label for="typeFilter">בחר סוג תרגיל</label>
         <select id="typeFilter"></select>
@@ -1055,6 +1060,7 @@
 
     const typeFilter = document.querySelector('#typeFilter');
     const sportFilter = document.querySelector('#sportFilter');
+    const searchInput = document.querySelector('#searchInput');
     const grid = document.querySelector('#exerciseGrid');
     const resultCount = document.querySelector('#resultCount');
     const backToTop = document.querySelector('#backToTop');
@@ -1086,10 +1092,21 @@
     function render() {
       const selectedType = typeFilter.value;
       const selectedSport = sportFilter.value;
+      const query = searchInput.value.trim().toLowerCase();
       const visible = exercises.filter((exercise) => {
         const matchesType = selectedType === allTypesValue || exercise.type === selectedType;
         const matchesSport = selectedSport === allSportsValue || exercise.sport === selectedSport;
-        return matchesType && matchesSport;
+        const searchable = [
+          exercise.title,
+          exercise.displayTitle,
+          exercise.type,
+          exercise.sport,
+          exercise.desc,
+          exercise.how,
+          exercise.helps
+        ].join(' ').toLowerCase();
+        const matchesSearch = query === '' || searchable.includes(query);
+        return matchesType && matchesSport && matchesSearch;
       });
 
       grid.innerHTML = '';
@@ -1130,6 +1147,7 @@
     sports.forEach((sport) => sportFilter.appendChild(option(sport, sport === allSportsValue ? 'הכל' : sport)));
     typeFilter.addEventListener('change', render);
     sportFilter.addEventListener('change', render);
+    searchInput.addEventListener('input', render);
     window.addEventListener('scroll', () => {
       backToTop.classList.toggle('visible', window.scrollY > 360);
     });
