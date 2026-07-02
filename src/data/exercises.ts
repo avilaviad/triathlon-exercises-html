@@ -9,6 +9,9 @@ type ExerciseSeed = {
   equipment: string[];
   prescription: string;
   frequency: string;
+  benefits: string[];
+  commonMistakes: string[];
+  executionTips: string[];
 };
 
 const categoryDetails: Record<
@@ -108,13 +111,11 @@ const directYoutubeUrls: Record<string, string> = {
 
 const youtubeVideoId = (url: string) => new URL(url).searchParams.get('v');
 
-const sentenceStartLower = (value: string) => value.charAt(0).toLowerCase() + value.slice(1);
 
 const createExercise = (seed: ExerciseSeed): Exercise => {
   const details = categoryDetails[seed.category];
   const youtubeUrl = directYoutubeUrls[seed.title] ?? youtubeSearchUrl(seed.title);
   const videoId = youtubeUrl.includes('/watch') ? youtubeVideoId(youtubeUrl) : null;
-  const exerciseIntent = sentenceStartLower(seed.description);
 
   return {
     id: toId(seed.title),
@@ -124,18 +125,14 @@ const createExercise = (seed: ExerciseSeed): Exercise => {
     thumbnailUrl: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '/pwa-192x192.png',
     thumbnailAlt: `${seed.title} exercise thumbnail`,
     description: seed.description,
-    benefits: [
-      `Reinforces ${exerciseIntent}`,
-      ...details.benefits,
-      sportBenefits[seed.targetSport]
-    ],
+    benefits: [...seed.benefits, ...details.benefits, sportBenefits[seed.targetSport]],
     targetSport: seed.targetSport,
     difficulty: seed.difficulty,
     equipment: [...seed.equipment],
     prescription: seed.prescription,
     frequency: seed.frequency,
-    commonMistakes: [`Missing the main goal of ${seed.title}: ${exerciseIntent}`, ...details.commonMistakes],
-    executionTips: [`Use the first rep of ${seed.title} to lock in the setup before adding speed`, ...details.executionTips],
+    commonMistakes: [...seed.commonMistakes, ...details.commonMistakes],
+    executionTips: [...seed.executionTips, ...details.executionTips],
     youtubeUrl
   };
 };
@@ -149,7 +146,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['pool'],
     prescription: '6 x 25m easy with full recovery',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves freestyle catch-up drill carryover for swim skill sessions'],
+    commonMistakes: ['Rushing freestyle catch-up drill until rhythm and position fall apart'],
+    executionTips: ['Keep freestyle catch-up drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Single-Arm Freestyle Drill',
@@ -159,7 +159,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['pool'],
     prescription: '4 x 25m each side',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves single-arm freestyle drill carryover for swim skill sessions'],
+    commonMistakes: ['Rushing single-arm freestyle drill until rhythm and position fall apart'],
+    executionTips: ['Keep single-arm freestyle drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Fingertip Drag Drill',
@@ -169,7 +172,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['pool'],
     prescription: '6 x 25m relaxed',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves fingertip drag drill carryover for swim skill sessions'],
+    commonMistakes: ['Rushing fingertip drag drill until rhythm and position fall apart'],
+    executionTips: ['Keep fingertip drag drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Front Sculling Drill',
@@ -179,7 +185,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['pool', 'pull buoy'],
     prescription: '8 x 15m scull then swim easy',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves front sculling drill carryover for swim skill sessions'],
+    commonMistakes: ['Rushing front sculling drill until rhythm and position fall apart'],
+    executionTips: ['Keep front sculling drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Bilateral Breathing Drill',
@@ -189,7 +198,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['pool'],
     prescription: '6 x 50m breathing every 3 strokes',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves bilateral breathing drill carryover for swim skill sessions'],
+    commonMistakes: ['Rushing bilateral breathing drill until rhythm and position fall apart'],
+    executionTips: ['Keep bilateral breathing drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'High Cadence Spin-Ups',
@@ -199,7 +211,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['bike', 'trainer'],
     prescription: '6 x 30 seconds fast cadence, 90 seconds easy',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves high cadence spin-ups carryover for bike skill sessions'],
+    commonMistakes: ['Rushing high cadence spin-ups until rhythm and position fall apart'],
+    executionTips: ['Keep high cadence spin-ups relaxed enough that timing stays repeatable']
   },
   {
     title: 'Single-Leg Pedal Drill',
@@ -209,7 +224,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['bike', 'trainer'],
     prescription: '4 x 30 seconds per leg',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves single-leg pedal drill carryover for bike skill sessions'],
+    commonMistakes: ['Rushing single-leg pedal drill until rhythm and position fall apart'],
+    executionTips: ['Keep single-leg pedal drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Seated Climb Cadence Control',
@@ -219,7 +237,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['bike'],
     prescription: '5 x 2 minutes at controlled tempo',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves seated climb cadence control carryover for bike skill sessions'],
+    commonMistakes: ['Rushing seated climb cadence control until rhythm and position fall apart'],
+    executionTips: ['Keep seated climb cadence control relaxed enough that timing stays repeatable']
   },
   {
     title: 'Cornering Line Practice',
@@ -229,7 +250,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['bike', 'cones'],
     prescription: '10 minutes of low-speed corner repeats',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves cornering line practice carryover for bike skill sessions'],
+    commonMistakes: ['Rushing cornering line practice until rhythm and position fall apart'],
+    executionTips: ['Keep cornering line practice relaxed enough that timing stays repeatable']
   },
   {
     title: 'A-Skip Drill',
@@ -239,7 +263,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 20m before easy runs',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves a-skip drill carryover for run skill sessions'],
+    commonMistakes: ['Rushing a-skip drill until rhythm and position fall apart'],
+    executionTips: ['Keep a-skip drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'B-Skip Drill',
@@ -249,7 +276,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 x 20m after A-skips',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves b-skip drill carryover for run skill sessions'],
+    commonMistakes: ['Rushing b-skip drill until rhythm and position fall apart'],
+    executionTips: ['Keep b-skip drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'High Knees Rhythm Drill',
@@ -259,7 +289,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '3 x 20 seconds',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves high knees rhythm drill carryover for run skill sessions'],
+    commonMistakes: ['Rushing high knees rhythm drill until rhythm and position fall apart'],
+    executionTips: ['Keep high knees rhythm drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Butt Kick Form Drill',
@@ -269,7 +302,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '3 x 20m relaxed',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves butt kick form drill carryover for run skill sessions'],
+    commonMistakes: ['Rushing butt kick form drill until rhythm and position fall apart'],
+    executionTips: ['Keep butt kick form drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Stride Build-Ups',
@@ -279,7 +315,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '4-6 x 20 seconds with walk-back recovery',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves stride build-ups carryover for run skill sessions'],
+    commonMistakes: ['Rushing stride build-ups until rhythm and position fall apart'],
+    executionTips: ['Keep stride build-ups relaxed enough that timing stays repeatable']
   },
   {
     title: 'Hill Cadence Drill',
@@ -289,7 +328,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['hill'],
     prescription: '6 x 10 seconds uphill',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves hill cadence drill carryover for run skill sessions'],
+    commonMistakes: ['Rushing hill cadence drill until rhythm and position fall apart'],
+    executionTips: ['Keep hill cadence drill relaxed enough that timing stays repeatable']
   },
   {
     title: 'Ankle Knee-to-Wall Mobilization',
@@ -299,7 +341,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['wall'],
     prescription: '2 sets of 10 reps per side',
-    frequency: '3 times weekly'
+    frequency: '3 times weekly',
+    benefits: ['Improves usable range for ankle knee-to-wall mobilization before run work'],
+    commonMistakes: ['Forcing ankle knee-to-wall mobilization past a controlled and pain-free range'],
+    executionTips: ['Move through ankle knee-to-wall mobilization slowly and pause at the tightest point']
   },
   {
     title: 'Hip 90/90 Switches',
@@ -309,7 +354,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 8 switches',
-    frequency: '3 times weekly'
+    frequency: '3 times weekly',
+    benefits: ['Improves usable range for hip 90/90 switches before mixed triathlon work'],
+    commonMistakes: ['Forcing hip 90/90 switches past a controlled and pain-free range'],
+    executionTips: ['Move through hip 90/90 switches slowly and pause at the tightest point']
   },
   {
     title: 'Thoracic Open Book Rotation',
@@ -319,7 +367,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 8 reps per side',
-    frequency: '3 times weekly'
+    frequency: '3 times weekly',
+    benefits: ['Improves usable range for thoracic open book rotation before swim work'],
+    commonMistakes: ['Forcing thoracic open book rotation past a controlled and pain-free range'],
+    executionTips: ['Move through thoracic open book rotation slowly and pause at the tightest point']
   },
   {
     title: 'Dynamic Couch Stretch Pulses',
@@ -329,7 +380,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['wall', 'pad'],
     prescription: '2 sets of 8 pulses per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Improves usable range for dynamic couch stretch pulses before bike work'],
+    commonMistakes: ['Forcing dynamic couch stretch pulses past a controlled and pain-free range'],
+    executionTips: ['Move through dynamic couch stretch pulses slowly and pause at the tightest point']
   },
   {
     title: 'Worlds Greatest Stretch Flow',
@@ -339,7 +393,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 rounds of 5 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves usable range for worlds greatest stretch flow before mixed triathlon work'],
+    commonMistakes: ['Forcing worlds greatest stretch flow past a controlled and pain-free range'],
+    executionTips: ['Move through worlds greatest stretch flow slowly and pause at the tightest point']
   },
   {
     title: 'Shoulder CARs',
@@ -349,7 +406,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 3 slow circles each direction',
-    frequency: '3 times weekly'
+    frequency: '3 times weekly',
+    benefits: ['Improves usable range for shoulder cars before swim work'],
+    commonMistakes: ['Forcing shoulder cars past a controlled and pain-free range'],
+    executionTips: ['Move through shoulder cars slowly and pause at the tightest point']
   },
   {
     title: 'Hip CARs',
@@ -359,7 +419,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['wall'],
     prescription: '2 sets of 3 circles per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Improves usable range for hip cars before run work'],
+    commonMistakes: ['Forcing hip cars past a controlled and pain-free range'],
+    executionTips: ['Move through hip cars slowly and pause at the tightest point']
   },
   {
     title: 'Cat-Cow Spinal Wave',
@@ -369,7 +432,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 8 slow reps',
-    frequency: '3 times weekly'
+    frequency: '3 times weekly',
+    benefits: ['Improves usable range for cat-cow spinal wave before mixed triathlon work'],
+    commonMistakes: ['Forcing cat-cow spinal wave past a controlled and pain-free range'],
+    executionTips: ['Move through cat-cow spinal wave slowly and pause at the tightest point']
   },
   {
     title: 'Deep Squat Pry',
@@ -379,7 +445,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 x 45 seconds',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves usable range for deep squat pry before bike work'],
+    commonMistakes: ['Forcing deep squat pry past a controlled and pain-free range'],
+    executionTips: ['Move through deep squat pry slowly and pause at the tightest point']
   },
   {
     title: 'Banded Lat Mobilization',
@@ -389,7 +458,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['resistance band'],
     prescription: '2 x 45 seconds per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves usable range for banded lat mobilization before swim work'],
+    commonMistakes: ['Forcing banded lat mobilization past a controlled and pain-free range'],
+    executionTips: ['Move through banded lat mobilization slowly and pause at the tightest point']
   },
   {
     title: 'Banded Ankle Distraction',
@@ -399,7 +471,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['resistance band'],
     prescription: '2 sets of 10 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves usable range for banded ankle distraction before run work'],
+    commonMistakes: ['Forcing banded ankle distraction past a controlled and pain-free range'],
+    executionTips: ['Move through banded ankle distraction slowly and pause at the tightest point']
   },
   {
     title: 'Wrist Rockbacks',
@@ -409,7 +484,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 10 reps',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves usable range for wrist rockbacks before mixed triathlon work'],
+    commonMistakes: ['Forcing wrist rockbacks past a controlled and pain-free range'],
+    executionTips: ['Move through wrist rockbacks slowly and pause at the tightest point']
   },
   {
     title: 'Adductor Rockbacks',
@@ -419,7 +497,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 10 reps per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Improves usable range for adductor rockbacks before run work'],
+    commonMistakes: ['Forcing adductor rockbacks past a controlled and pain-free range'],
+    executionTips: ['Move through adductor rockbacks slowly and pause at the tightest point']
   },
   {
     title: 'Lunge With T-Spine Rotation',
@@ -429,7 +510,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 sets of 6 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Improves usable range for lunge with t-spine rotation before mixed triathlon work'],
+    commonMistakes: ['Forcing lunge with t-spine rotation past a controlled and pain-free range'],
+    executionTips: ['Move through lunge with t-spine rotation slowly and pause at the tightest point']
   },
   {
     title: 'Foam Roller Thoracic Extension',
@@ -439,7 +523,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['foam roller'],
     prescription: '6-8 slow extensions',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Improves usable range for foam roller thoracic extension before swim work'],
+    commonMistakes: ['Forcing foam roller thoracic extension past a controlled and pain-free range'],
+    executionTips: ['Move through foam roller thoracic extension slowly and pause at the tightest point']
   },
   {
     title: 'Single-Leg Balance Reach',
@@ -449,7 +536,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 6 reaches per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during single-leg balance reach'],
+    commonMistakes: ['Letting the hips or ribs drift while performing single-leg balance reach'],
+    executionTips: ['Make single-leg balance reach smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Hip Airplane',
@@ -459,7 +549,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['wall'],
     prescription: '2 sets of 5 reps per side',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds control needed to hold position during hip airplane'],
+    commonMistakes: ['Letting the hips or ribs drift while performing hip airplane'],
+    executionTips: ['Make hip airplane smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Side Plank With Leg Lift',
@@ -469,7 +562,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['none'],
     prescription: '2 sets of 20 seconds per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during side plank with leg lift'],
+    commonMistakes: ['Letting the hips or ribs drift while performing side plank with leg lift'],
+    executionTips: ['Make side plank with leg lift smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Dead Bug',
@@ -479,7 +575,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 8 reps per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Builds control needed to hold position during dead bug'],
+    commonMistakes: ['Letting the hips or ribs drift while performing dead bug'],
+    executionTips: ['Make dead bug smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Bird Dog',
@@ -489,7 +588,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 8 reps per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Builds control needed to hold position during bird dog'],
+    commonMistakes: ['Letting the hips or ribs drift while performing bird dog'],
+    executionTips: ['Make bird dog smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Pallof Press Hold',
@@ -499,7 +601,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['resistance band'],
     prescription: '3 x 20 seconds per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during pallof press hold'],
+    commonMistakes: ['Letting the hips or ribs drift while performing pallof press hold'],
+    executionTips: ['Make pallof press hold smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Single-Leg Glute Bridge',
@@ -509,7 +614,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 sets of 8 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during single-leg glute bridge'],
+    commonMistakes: ['Letting the hips or ribs drift while performing single-leg glute bridge'],
+    executionTips: ['Make single-leg glute bridge smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Runners Step-Down',
@@ -519,7 +627,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['step'],
     prescription: '2 sets of 8 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during runners step-down'],
+    commonMistakes: ['Letting the hips or ribs drift while performing runners step-down'],
+    executionTips: ['Make runners step-down smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Copenhagen Side Plank Short Lever',
@@ -529,7 +640,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['bench'],
     prescription: '2 x 15 seconds per side',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds control needed to hold position during copenhagen side plank short lever'],
+    commonMistakes: ['Letting the hips or ribs drift while performing copenhagen side plank short lever'],
+    executionTips: ['Make copenhagen side plank short lever smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Swim Streamline Hollow Hold',
@@ -539,7 +653,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '3 x 20 seconds',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during swim streamline hollow hold'],
+    commonMistakes: ['Letting the hips or ribs drift while performing swim streamline hollow hold'],
+    executionTips: ['Make swim streamline hollow hold smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Plank Shoulder Taps',
@@ -549,7 +666,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 sets of 10 taps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during plank shoulder taps'],
+    commonMistakes: ['Letting the hips or ribs drift while performing plank shoulder taps'],
+    executionTips: ['Make plank shoulder taps smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Split Squat Iso Hold',
@@ -559,7 +679,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 x 30 seconds per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during split squat iso hold'],
+    commonMistakes: ['Letting the hips or ribs drift while performing split squat iso hold'],
+    executionTips: ['Make split squat iso hold smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Single-Leg Romanian Deadlift Reach',
@@ -569,7 +692,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 sets of 6 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds control needed to hold position during single-leg romanian deadlift reach'],
+    commonMistakes: ['Letting the hips or ribs drift while performing single-leg romanian deadlift reach'],
+    executionTips: ['Make single-leg romanian deadlift reach smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Band Lateral Walk',
@@ -579,7 +705,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['mini band'],
     prescription: '2 x 10 steps each direction',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Builds control needed to hold position during band lateral walk'],
+    commonMistakes: ['Letting the hips or ribs drift while performing band lateral walk'],
+    executionTips: ['Make band lateral walk smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Stability Ball Stir-the-Pot',
@@ -589,7 +718,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['stability ball'],
     prescription: '2 sets of 8 circles each direction',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds control needed to hold position during stability ball stir-the-pot'],
+    commonMistakes: ['Letting the hips or ribs drift while performing stability ball stir-the-pot'],
+    executionTips: ['Make stability ball stir-the-pot smaller until balance and trunk control stay quiet']
   },
   {
     title: 'Standing Calf Stretch',
@@ -599,7 +731,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['wall'],
     prescription: '2 x 30 seconds per side',
-    frequency: 'After runs'
+    frequency: 'After runs',
+    benefits: ['Eases tissue tension targeted by standing calf stretch after run training'],
+    commonMistakes: ['Pushing standing calf stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold standing calf stretch with steady breathing and no bouncing']
   },
   {
     title: 'Soleus Wall Stretch',
@@ -609,7 +744,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['wall'],
     prescription: '2 x 30 seconds per side',
-    frequency: 'After runs'
+    frequency: 'After runs',
+    benefits: ['Eases tissue tension targeted by soleus wall stretch after run training'],
+    commonMistakes: ['Pushing soleus wall stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold soleus wall stretch with steady breathing and no bouncing']
   },
   {
     title: 'Figure Four Glute Stretch',
@@ -619,7 +757,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 40 seconds per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Eases tissue tension targeted by figure four glute stretch after run training'],
+    commonMistakes: ['Pushing figure four glute stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold figure four glute stretch with steady breathing and no bouncing']
   },
   {
     title: 'Kneeling Hip Flexor Stretch',
@@ -629,7 +770,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['pad'],
     prescription: '2 x 30 seconds per side',
-    frequency: 'After rides'
+    frequency: 'After rides',
+    benefits: ['Eases tissue tension targeted by kneeling hip flexor stretch after bike training'],
+    commonMistakes: ['Pushing kneeling hip flexor stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold kneeling hip flexor stretch with steady breathing and no bouncing']
   },
   {
     title: 'Hamstring Strap Stretch',
@@ -639,7 +783,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['strap'],
     prescription: '2 x 30 seconds per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Eases tissue tension targeted by hamstring strap stretch after run training'],
+    commonMistakes: ['Pushing hamstring strap stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold hamstring strap stretch with steady breathing and no bouncing']
   },
   {
     title: 'Quad Couch Stretch',
@@ -649,7 +796,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['wall', 'pad'],
     prescription: '2 x 30 seconds per side',
-    frequency: 'After rides'
+    frequency: 'After rides',
+    benefits: ['Eases tissue tension targeted by quad couch stretch after bike training'],
+    commonMistakes: ['Pushing quad couch stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold quad couch stretch with steady breathing and no bouncing']
   },
   {
     title: 'Lat Doorway Stretch',
@@ -659,7 +809,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['doorway'],
     prescription: '2 x 30 seconds per side',
-    frequency: 'After swims'
+    frequency: 'After swims',
+    benefits: ['Eases tissue tension targeted by lat doorway stretch after swim training'],
+    commonMistakes: ['Pushing lat doorway stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold lat doorway stretch with steady breathing and no bouncing']
   },
   {
     title: 'Pec Doorway Stretch',
@@ -669,7 +822,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['doorway'],
     prescription: '2 x 30 seconds per side',
-    frequency: 'After swims'
+    frequency: 'After swims',
+    benefits: ['Eases tissue tension targeted by pec doorway stretch after swim training'],
+    commonMistakes: ['Pushing pec doorway stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold pec doorway stretch with steady breathing and no bouncing']
   },
   {
     title: 'Childs Pose Lat Reach',
@@ -679,7 +835,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 30 seconds per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Eases tissue tension targeted by childs pose lat reach after swim training'],
+    commonMistakes: ['Pushing childs pose lat reach into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold childs pose lat reach with steady breathing and no bouncing']
   },
   {
     title: 'Seated Adductor Stretch',
@@ -689,7 +848,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 40 seconds',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Eases tissue tension targeted by seated adductor stretch after run training'],
+    commonMistakes: ['Pushing seated adductor stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold seated adductor stretch with steady breathing and no bouncing']
   },
   {
     title: 'Supine Spinal Twist',
@@ -699,7 +861,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 30 seconds per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Eases tissue tension targeted by supine spinal twist after mixed triathlon training'],
+    commonMistakes: ['Pushing supine spinal twist into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold supine spinal twist with steady breathing and no bouncing']
   },
   {
     title: 'Downward Dog Pedal',
@@ -709,7 +874,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 x 45 seconds',
-    frequency: 'After runs'
+    frequency: 'After runs',
+    benefits: ['Eases tissue tension targeted by downward dog pedal after run training'],
+    commonMistakes: ['Pushing downward dog pedal into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold downward dog pedal with steady breathing and no bouncing']
   },
   {
     title: 'Wrist Flexor Stretch',
@@ -719,7 +887,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 20 seconds per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Eases tissue tension targeted by wrist flexor stretch after swim training'],
+    commonMistakes: ['Pushing wrist flexor stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold wrist flexor stretch with steady breathing and no bouncing']
   },
   {
     title: 'Upper Trap Neck Stretch',
@@ -729,7 +900,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 20 seconds per side',
-    frequency: 'After long rides'
+    frequency: 'After long rides',
+    benefits: ['Eases tissue tension targeted by upper trap neck stretch after bike training'],
+    commonMistakes: ['Pushing upper trap neck stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold upper trap neck stretch with steady breathing and no bouncing']
   },
   {
     title: 'Triceps Overhead Stretch',
@@ -739,7 +913,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 30 seconds per side',
-    frequency: 'After swims'
+    frequency: 'After swims',
+    benefits: ['Eases tissue tension targeted by triceps overhead stretch after swim training'],
+    commonMistakes: ['Pushing triceps overhead stretch into sharp discomfort instead of mild stretch tension'],
+    executionTips: ['Hold triceps overhead stretch with steady breathing and no bouncing']
   },
   {
     title: 'Rotator Cuff External Rotation',
@@ -749,7 +926,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['resistance band'],
     prescription: '2 sets of 12 reps per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by rotator cuff external rotation'],
+    commonMistakes: ['Using momentum during rotator cuff external rotation instead of controlled loading'],
+    executionTips: ['Keep rotator cuff external rotation light enough that every rep stays precise']
   },
   {
     title: 'Band Pull-Aparts',
@@ -759,7 +939,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['resistance band'],
     prescription: '2 sets of 15 reps',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by band pull-aparts'],
+    commonMistakes: ['Using momentum during band pull-aparts instead of controlled loading'],
+    executionTips: ['Keep band pull-aparts light enough that every rep stays precise']
   },
   {
     title: 'Serratus Wall Slides',
@@ -769,7 +952,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['wall', 'mini band'],
     prescription: '2 sets of 10 reps',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by serratus wall slides'],
+    commonMistakes: ['Using momentum during serratus wall slides instead of controlled loading'],
+    executionTips: ['Keep serratus wall slides light enough that every rep stays precise']
   },
   {
     title: 'Tibialis Raises',
@@ -779,7 +965,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['wall'],
     prescription: '2 sets of 15 reps',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by tibialis raises'],
+    commonMistakes: ['Using momentum during tibialis raises instead of controlled loading'],
+    executionTips: ['Keep tibialis raises light enough that every rep stays precise']
   },
   {
     title: 'Eccentric Calf Raises',
@@ -789,7 +978,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['step'],
     prescription: '2 sets of 8 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by eccentric calf raises'],
+    commonMistakes: ['Using momentum during eccentric calf raises instead of controlled loading'],
+    executionTips: ['Keep eccentric calf raises light enough that every rep stays precise']
   },
   {
     title: 'Monster Walks',
@@ -799,7 +991,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['mini band'],
     prescription: '2 x 10 steps each direction',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by monster walks'],
+    commonMistakes: ['Using momentum during monster walks instead of controlled loading'],
+    executionTips: ['Keep monster walks light enough that every rep stays precise']
   },
   {
     title: 'Clamshells',
@@ -809,7 +1004,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['mini band'],
     prescription: '2 sets of 12 reps per side',
-    frequency: '2-3 times weekly'
+    frequency: '2-3 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by clamshells'],
+    commonMistakes: ['Using momentum during clamshells instead of controlled loading'],
+    executionTips: ['Keep clamshells light enough that every rep stays precise']
   },
   {
     title: 'Spanish Squat Isometric',
@@ -819,7 +1017,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['resistance band'],
     prescription: '3 x 30 seconds',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by spanish squat isometric'],
+    commonMistakes: ['Using momentum during spanish squat isometric instead of controlled loading'],
+    executionTips: ['Keep spanish squat isometric light enough that every rep stays precise']
   },
   {
     title: 'Nordic Hamstring Eccentric',
@@ -829,7 +1030,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['anchor', 'pad'],
     prescription: '2 sets of 4 slow reps',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Builds capacity in the support tissues trained by nordic hamstring eccentric'],
+    commonMistakes: ['Using momentum during nordic hamstring eccentric instead of controlled loading'],
+    executionTips: ['Keep nordic hamstring eccentric light enough that every rep stays precise']
   },
   {
     title: 'Toe Yoga',
@@ -839,7 +1043,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 sets of 8 reps each pattern',
-    frequency: '3 times weekly'
+    frequency: '3 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by toe yoga'],
+    commonMistakes: ['Using momentum during toe yoga instead of controlled loading'],
+    executionTips: ['Keep toe yoga light enough that every rep stays precise']
   },
   {
     title: 'Foot Short-Doming Drill',
@@ -849,7 +1056,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2 x 20 seconds per foot',
-    frequency: '3 times weekly'
+    frequency: '3 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by foot short-doming drill'],
+    commonMistakes: ['Using momentum during foot short-doming drill instead of controlled loading'],
+    executionTips: ['Keep foot short-doming drill light enough that every rep stays precise']
   },
   {
     title: 'Scapular Push-Ups',
@@ -859,7 +1069,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 sets of 10 reps',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by scapular push-ups'],
+    commonMistakes: ['Using momentum during scapular push-ups instead of controlled loading'],
+    executionTips: ['Keep scapular push-ups light enough that every rep stays precise']
   },
   {
     title: 'Prone Y-T-W Raises',
@@ -869,7 +1082,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '2 rounds of 6 reps each shape',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by prone y-t-w raises'],
+    commonMistakes: ['Using momentum during prone y-t-w raises instead of controlled loading'],
+    executionTips: ['Keep prone y-t-w raises light enough that every rep stays precise']
   },
   {
     title: 'Copenhagen Adductor Raises',
@@ -879,7 +1095,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['bench'],
     prescription: '2 sets of 6 reps per side',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by copenhagen adductor raises'],
+    commonMistakes: ['Using momentum during copenhagen adductor raises instead of controlled loading'],
+    executionTips: ['Keep copenhagen adductor raises light enough that every rep stays precise']
   },
   {
     title: 'Terminal Knee Extensions',
@@ -889,7 +1108,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['resistance band'],
     prescription: '2 sets of 12 reps per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds capacity in the support tissues trained by terminal knee extensions'],
+    commonMistakes: ['Using momentum during terminal knee extensions instead of controlled loading'],
+    executionTips: ['Keep terminal knee extensions light enough that every rep stays precise']
   },
   {
     title: 'Diaphragmatic 90/90 Breathing',
@@ -899,7 +1121,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['wall'],
     prescription: '5 minutes easy breathing',
-    frequency: 'Daily or after hard sessions'
+    frequency: 'Daily or after hard sessions',
+    benefits: ['Improves breath control practiced during diaphragmatic 90/90 breathing'],
+    commonMistakes: ['Forcing diaphragmatic 90/90 breathing after the breath stops feeling calm'],
+    executionTips: ['Use diaphragmatic 90/90 breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Box Breathing',
@@ -909,7 +1134,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '4 rounds of 4-4-4-4 counts',
-    frequency: 'As needed before training'
+    frequency: 'As needed before training',
+    benefits: ['Improves breath control practiced during box breathing'],
+    commonMistakes: ['Forcing box breathing after the breath stops feeling calm'],
+    executionTips: ['Use box breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Crocodile Breathing',
@@ -919,7 +1147,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '3-5 minutes',
-    frequency: 'Daily'
+    frequency: 'Daily',
+    benefits: ['Improves breath control practiced during crocodile breathing'],
+    commonMistakes: ['Forcing crocodile breathing after the breath stops feeling calm'],
+    executionTips: ['Use crocodile breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Cadence Breathing Walk',
@@ -929,7 +1160,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '5-10 minutes easy walk',
-    frequency: 'Recovery days'
+    frequency: 'Recovery days',
+    benefits: ['Improves breath control practiced during cadence breathing walk'],
+    commonMistakes: ['Forcing cadence breathing walk after the breath stops feeling calm'],
+    executionTips: ['Use cadence breathing walk at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Nasal Breathing Easy Spin',
@@ -939,7 +1173,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['bike'],
     prescription: '10 minutes in zone 1',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves breath control practiced during nasal breathing easy spin'],
+    commonMistakes: ['Forcing nasal breathing easy spin after the breath stops feeling calm'],
+    executionTips: ['Use nasal breathing easy spin at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Extended Exhale Breathing',
@@ -949,7 +1186,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '5 minutes with 3-count inhale and 6-count exhale',
-    frequency: 'After hard sessions'
+    frequency: 'After hard sessions',
+    benefits: ['Improves breath control practiced during extended exhale breathing'],
+    commonMistakes: ['Forcing extended exhale breathing after the breath stops feeling calm'],
+    executionTips: ['Use extended exhale breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Recovery Position Breathing',
@@ -959,7 +1199,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '5 slow breaths between repeats',
-    frequency: 'During interval sessions'
+    frequency: 'During interval sessions',
+    benefits: ['Improves breath control practiced during recovery position breathing'],
+    commonMistakes: ['Forcing recovery position breathing after the breath stops feeling calm'],
+    executionTips: ['Use recovery position breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Swim Bilateral Exhale Drill',
@@ -969,7 +1212,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['pool'],
     prescription: '6 x 25m easy',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves breath control practiced during swim bilateral exhale drill'],
+    commonMistakes: ['Forcing swim bilateral exhale drill after the breath stops feeling calm'],
+    executionTips: ['Use swim bilateral exhale drill at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Pre-Race Downshift Breathing',
@@ -979,7 +1225,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '2-3 minutes before warmup',
-    frequency: 'Race days or key sessions'
+    frequency: 'Race days or key sessions',
+    benefits: ['Improves breath control practiced during pre-race downshift breathing'],
+    commonMistakes: ['Forcing pre-race downshift breathing after the breath stops feeling calm'],
+    executionTips: ['Use pre-race downshift breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'CO2 Tolerance Humming Exhale',
@@ -989,7 +1238,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['none'],
     prescription: '6 rounds of comfortable long exhales',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Improves breath control practiced during co2 tolerance humming exhale'],
+    commonMistakes: ['Forcing co2 tolerance humming exhale after the breath stops feeling calm'],
+    executionTips: ['Use co2 tolerance humming exhale at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Rib Expansion Breathing',
@@ -999,7 +1251,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '3 minutes',
-    frequency: 'Before swims'
+    frequency: 'Before swims',
+    benefits: ['Improves breath control practiced during rib expansion breathing'],
+    commonMistakes: ['Forcing rib expansion breathing after the breath stops feeling calm'],
+    executionTips: ['Use rib expansion breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: '4-7-8 Breathing',
@@ -1009,7 +1264,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '4 rounds',
-    frequency: 'Evenings or rest days'
+    frequency: 'Evenings or rest days',
+    benefits: ['Improves breath control practiced during 4-7-8 breathing'],
+    commonMistakes: ['Forcing 4-7-8 breathing after the breath stops feeling calm'],
+    executionTips: ['Use 4-7-8 breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Pursed-Lip Breathing',
@@ -1019,7 +1277,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '3-5 minutes',
-    frequency: 'After training'
+    frequency: 'After training',
+    benefits: ['Improves breath control practiced during pursed-lip breathing'],
+    commonMistakes: ['Forcing pursed-lip breathing after the breath stops feeling calm'],
+    executionTips: ['Use pursed-lip breathing at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Tempo Run Breathing Practice',
@@ -1029,7 +1290,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['none'],
     prescription: '4 x 2 minutes at steady tempo',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Improves breath control practiced during tempo run breathing practice'],
+    commonMistakes: ['Forcing tempo run breathing practice after the breath stops feeling calm'],
+    executionTips: ['Use tempo run breathing practice at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Post-Interval Reset Breaths',
@@ -1039,7 +1303,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '3 slow breaths after each interval',
-    frequency: 'During hard sessions'
+    frequency: 'During hard sessions',
+    benefits: ['Improves breath control practiced during post-interval reset breaths'],
+    commonMistakes: ['Forcing post-interval reset breaths after the breath stops feeling calm'],
+    executionTips: ['Use post-interval reset breaths at an easy rhythm and return to normal breathing if strained']
   },
   {
     title: 'Foam Roll Calves',
@@ -1049,7 +1316,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['foam roller'],
     prescription: '60 seconds per side',
-    frequency: 'After hard runs'
+    frequency: 'After hard runs',
+    benefits: ['Supports downregulation and local relief from foam roll calves'],
+    commonMistakes: ['Pressing or working too hard during foam roll calves to make it feel productive'],
+    executionTips: ['Keep foam roll calves gentle enough that you feel calmer afterward']
   },
   {
     title: 'Foam Roll Quads',
@@ -1059,7 +1329,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['foam roller'],
     prescription: '60 seconds per side',
-    frequency: 'After rides'
+    frequency: 'After rides',
+    benefits: ['Supports downregulation and local relief from foam roll quads'],
+    commonMistakes: ['Pressing or working too hard during foam roll quads to make it feel productive'],
+    executionTips: ['Keep foam roll quads gentle enough that you feel calmer afterward']
   },
   {
     title: 'Foam Roll Hip and IT Band Area',
@@ -1069,7 +1342,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['foam roller'],
     prescription: '60 seconds per side',
-    frequency: 'After long runs'
+    frequency: 'After long runs',
+    benefits: ['Supports downregulation and local relief from foam roll hip and it band area'],
+    commonMistakes: ['Pressing or working too hard during foam roll hip and it band area to make it feel productive'],
+    executionTips: ['Keep foam roll hip and it band area gentle enough that you feel calmer afterward']
   },
   {
     title: 'Foam Roll Glutes',
@@ -1079,7 +1355,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['foam roller'],
     prescription: '60 seconds per side',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Supports downregulation and local relief from foam roll glutes'],
+    commonMistakes: ['Pressing or working too hard during foam roll glutes to make it feel productive'],
+    executionTips: ['Keep foam roll glutes gentle enough that you feel calmer afterward']
   },
   {
     title: 'Foam Roll Lats',
@@ -1089,7 +1368,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['foam roller'],
     prescription: '45 seconds per side',
-    frequency: 'After swims'
+    frequency: 'After swims',
+    benefits: ['Supports downregulation and local relief from foam roll lats'],
+    commonMistakes: ['Pressing or working too hard during foam roll lats to make it feel productive'],
+    executionTips: ['Keep foam roll lats gentle enough that you feel calmer afterward']
   },
   {
     title: 'Lacrosse Ball Plantar Release',
@@ -1099,7 +1381,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['lacrosse ball'],
     prescription: '60 seconds per foot',
-    frequency: 'After runs'
+    frequency: 'After runs',
+    benefits: ['Supports downregulation and local relief from lacrosse ball plantar release'],
+    commonMistakes: ['Pressing or working too hard during lacrosse ball plantar release to make it feel productive'],
+    executionTips: ['Keep lacrosse ball plantar release gentle enough that you feel calmer afterward']
   },
   {
     title: 'Lacrosse Ball Pec Release',
@@ -1109,7 +1394,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['lacrosse ball', 'wall'],
     prescription: '45 seconds per side',
-    frequency: 'After swims'
+    frequency: 'After swims',
+    benefits: ['Supports downregulation and local relief from lacrosse ball pec release'],
+    commonMistakes: ['Pressing or working too hard during lacrosse ball pec release to make it feel productive'],
+    executionTips: ['Keep lacrosse ball pec release gentle enough that you feel calmer afterward']
   },
   {
     title: 'Legs-Up-the-Wall',
@@ -1119,7 +1407,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['wall'],
     prescription: '5-10 minutes',
-    frequency: 'After long sessions'
+    frequency: 'After long sessions',
+    benefits: ['Supports downregulation and local relief from legs-up-the-wall'],
+    commonMistakes: ['Pressing or working too hard during legs-up-the-wall to make it feel productive'],
+    executionTips: ['Keep legs-up-the-wall gentle enough that you feel calmer afterward']
   },
   {
     title: 'Easy Walk Cooldown',
@@ -1129,7 +1420,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '5-10 minutes',
-    frequency: 'After workouts'
+    frequency: 'After workouts',
+    benefits: ['Supports downregulation and local relief from easy walk cooldown'],
+    commonMistakes: ['Pressing or working too hard during easy walk cooldown to make it feel productive'],
+    executionTips: ['Keep easy walk cooldown gentle enough that you feel calmer afterward']
   },
   {
     title: 'Gentle Pool Walking',
@@ -1139,7 +1433,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['pool'],
     prescription: '10 minutes easy',
-    frequency: 'Recovery days'
+    frequency: 'Recovery days',
+    benefits: ['Supports downregulation and local relief from gentle pool walking'],
+    commonMistakes: ['Pressing or working too hard during gentle pool walking to make it feel productive'],
+    executionTips: ['Keep gentle pool walking gentle enough that you feel calmer afterward']
   },
   {
     title: 'Compression Breathing Reset',
@@ -1149,7 +1446,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['compression boots'],
     prescription: '10-15 minutes',
-    frequency: 'After long sessions'
+    frequency: 'After long sessions',
+    benefits: ['Supports downregulation and local relief from compression breathing reset'],
+    commonMistakes: ['Pressing or working too hard during compression breathing reset to make it feel productive'],
+    executionTips: ['Keep compression breathing reset gentle enough that you feel calmer afterward']
   },
   {
     title: 'Sleep Wind-Down Mobility',
@@ -1159,7 +1459,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '5 minutes',
-    frequency: 'Evenings'
+    frequency: 'Evenings',
+    benefits: ['Supports downregulation and local relief from sleep wind-down mobility'],
+    commonMistakes: ['Pressing or working too hard during sleep wind-down mobility to make it feel productive'],
+    executionTips: ['Keep sleep wind-down mobility gentle enough that you feel calmer afterward']
   },
   {
     title: 'Recovery Spin',
@@ -1169,7 +1472,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['bike'],
     prescription: '20-30 minutes zone 1',
-    frequency: 'Recovery days'
+    frequency: 'Recovery days',
+    benefits: ['Supports downregulation and local relief from recovery spin'],
+    commonMistakes: ['Pressing or working too hard during recovery spin to make it feel productive'],
+    executionTips: ['Keep recovery spin gentle enough that you feel calmer afterward']
   },
   {
     title: 'Recovery Swim Drill Set',
@@ -1179,7 +1485,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['pool'],
     prescription: '8 x 50m easy drill choice',
-    frequency: 'After hard run or bike days'
+    frequency: 'After hard run or bike days',
+    benefits: ['Supports downregulation and local relief from recovery swim drill set'],
+    commonMistakes: ['Pressing or working too hard during recovery swim drill set to make it feel productive'],
+    executionTips: ['Keep recovery swim drill set gentle enough that you feel calmer afterward']
   },
   {
     title: 'Guided Body Scan Relaxation',
@@ -1189,7 +1498,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '5-10 minutes',
-    frequency: 'Rest days'
+    frequency: 'Rest days',
+    benefits: ['Supports downregulation and local relief from guided body scan relaxation'],
+    commonMistakes: ['Pressing or working too hard during guided body scan relaxation to make it feel productive'],
+    executionTips: ['Keep guided body scan relaxation gentle enough that you feel calmer afterward']
   },
   {
     title: 'Goblet Squat',
@@ -1199,7 +1511,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['kettlebell'],
     prescription: '3 sets of 8 reps',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by goblet squat for bike durability'],
+    commonMistakes: ['Adding load to goblet squat before alignment and range are controlled'],
+    executionTips: ['Use goblet squat with clean tempo and stop before form changes']
   },
   {
     title: 'Romanian Deadlift',
@@ -1209,7 +1524,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['barbell'],
     prescription: '3 sets of 6-8 reps',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by romanian deadlift for run durability'],
+    commonMistakes: ['Adding load to romanian deadlift before alignment and range are controlled'],
+    executionTips: ['Use romanian deadlift with clean tempo and stop before form changes']
   },
   {
     title: 'Rear-Foot Elevated Split Squat',
@@ -1219,7 +1537,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['bench', 'dumbbells'],
     prescription: '3 sets of 6 reps per side',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Builds strength qualities trained by rear-foot elevated split squat for run durability'],
+    commonMistakes: ['Adding load to rear-foot elevated split squat before alignment and range are controlled'],
+    executionTips: ['Use rear-foot elevated split squat with clean tempo and stop before form changes']
   },
   {
     title: 'Step-Ups',
@@ -1229,7 +1550,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['box'],
     prescription: '3 sets of 8 reps per side',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by step-ups for bike durability'],
+    commonMistakes: ['Adding load to step-ups before alignment and range are controlled'],
+    executionTips: ['Use step-ups with clean tempo and stop before form changes']
   },
   {
     title: 'Push-Ups',
@@ -1239,7 +1563,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['none'],
     prescription: '3 sets of 6-12 reps',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by push-ups for swim durability'],
+    commonMistakes: ['Adding load to push-ups before alignment and range are controlled'],
+    executionTips: ['Use push-ups with clean tempo and stop before form changes']
   },
   {
     title: 'Assisted Pull-Ups',
@@ -1249,7 +1576,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['pull-up bar', 'resistance band'],
     prescription: '3 sets of 4-6 reps',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by assisted pull-ups for swim durability'],
+    commonMistakes: ['Adding load to assisted pull-ups before alignment and range are controlled'],
+    executionTips: ['Use assisted pull-ups with clean tempo and stop before form changes']
   },
   {
     title: 'Bent-Over Row',
@@ -1259,7 +1589,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['dumbbells'],
     prescription: '3 sets of 8 reps',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by bent-over row for swim durability'],
+    commonMistakes: ['Adding load to bent-over row before alignment and range are controlled'],
+    executionTips: ['Use bent-over row with clean tempo and stop before form changes']
   },
   {
     title: 'Kettlebell Deadlift',
@@ -1269,7 +1602,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['kettlebell'],
     prescription: '3 sets of 8 reps',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by kettlebell deadlift for mixed triathlon durability'],
+    commonMistakes: ['Adding load to kettlebell deadlift before alignment and range are controlled'],
+    executionTips: ['Use kettlebell deadlift with clean tempo and stop before form changes']
   },
   {
     title: 'Lateral Lunge',
@@ -1279,7 +1615,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['none'],
     prescription: '3 sets of 6 reps per side',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Builds strength qualities trained by lateral lunge for run durability'],
+    commonMistakes: ['Adding load to lateral lunge before alignment and range are controlled'],
+    executionTips: ['Use lateral lunge with clean tempo and stop before form changes']
   },
   {
     title: 'Standing Calf Raise',
@@ -1289,7 +1628,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'beginner',
     equipment: ['step'],
     prescription: '3 sets of 12 reps',
-    frequency: '2 times weekly'
+    frequency: '2 times weekly',
+    benefits: ['Builds strength qualities trained by standing calf raise for run durability'],
+    commonMistakes: ['Adding load to standing calf raise before alignment and range are controlled'],
+    executionTips: ['Use standing calf raise with clean tempo and stop before form changes']
   },
   {
     title: 'Farmer Carry',
@@ -1299,7 +1641,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['dumbbells'],
     prescription: '4 x 30 meters',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Builds strength qualities trained by farmer carry for mixed triathlon durability'],
+    commonMistakes: ['Adding load to farmer carry before alignment and range are controlled'],
+    executionTips: ['Use farmer carry with clean tempo and stop before form changes']
   },
   {
     title: 'Renegade Row',
@@ -1309,7 +1654,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'advanced',
     equipment: ['dumbbells'],
     prescription: '3 sets of 6 reps per side',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Builds strength qualities trained by renegade row for swim durability'],
+    commonMistakes: ['Adding load to renegade row before alignment and range are controlled'],
+    executionTips: ['Use renegade row with clean tempo and stop before form changes']
   },
   {
     title: 'Dumbbell Overhead Press',
@@ -1319,7 +1667,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['dumbbells'],
     prescription: '3 sets of 6-8 reps',
-    frequency: '1 time weekly'
+    frequency: '1 time weekly',
+    benefits: ['Builds strength qualities trained by dumbbell overhead press for swim durability'],
+    commonMistakes: ['Adding load to dumbbell overhead press before alignment and range are controlled'],
+    executionTips: ['Use dumbbell overhead press with clean tempo and stop before form changes']
   },
   {
     title: 'Hamstring Slider Curl',
@@ -1329,7 +1680,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['sliders'],
     prescription: '3 sets of 8 reps',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by hamstring slider curl for run durability'],
+    commonMistakes: ['Adding load to hamstring slider curl before alignment and range are controlled'],
+    executionTips: ['Use hamstring slider curl with clean tempo and stop before form changes']
   },
   {
     title: 'Single-Arm Cable Row',
@@ -1339,7 +1693,10 @@ const exerciseSeeds: ExerciseSeed[] = [
     difficulty: 'intermediate',
     equipment: ['cable machine'],
     prescription: '3 sets of 8 reps per side',
-    frequency: '1-2 times weekly'
+    frequency: '1-2 times weekly',
+    benefits: ['Builds strength qualities trained by single-arm cable row for swim durability'],
+    commonMistakes: ['Adding load to single-arm cable row before alignment and range are controlled'],
+    executionTips: ['Use single-arm cable row with clean tempo and stop before form changes']
   }
 ];
 

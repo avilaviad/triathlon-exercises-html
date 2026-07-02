@@ -19,6 +19,10 @@ const isDirectYoutubeUrl = (value: string) =>
   /^https:\/\/(www\.)?youtube\.com\/watch\?v=/.test(value) ||
   /^https:\/\/(www\.)?youtube\.com\/shorts\//.test(value) ||
   /^https:\/\/youtu\.be\//.test(value);
+const isYoutubeSearchFallbackUrl = (value: string) =>
+  /^https:\/\/(www\.)?youtube\.com\/results\?search_query=.+/.test(value);
+const isAllowedYoutubeUrl = (value: string) =>
+  isDirectYoutubeUrl(value) || isYoutubeSearchFallbackUrl(value);
 
 const genericGuidance: Record<
   ExerciseCategory,
@@ -110,6 +114,7 @@ describe('built-in exercise library', () => {
       expect(hasTextArray(exercise.executionTips)).toBe(true);
       expect(hasText(exercise.youtubeUrl ?? '')).toBe(true);
       expect(() => new URL(exercise.youtubeUrl ?? '')).not.toThrow();
+      expect(isAllowedYoutubeUrl(exercise.youtubeUrl ?? '')).toBe(true);
     }
   });
 
@@ -131,6 +136,29 @@ describe('built-in exercise library', () => {
       expect(hasExerciseSpecificGuidance(exercise, 'commonMistakes')).toBe(true);
       expect(hasExerciseSpecificGuidance(exercise, 'executionTips')).toBe(true);
     }
+  });
+
+  it('does not use generated title or description boilerplate as coaching guidance', () => {
+    for (const exercise of exercises) {
+      expect(exercise.benefits.some((benefit) => benefit.startsWith('Reinforces '))).toBe(false);
+      expect(
+        exercise.commonMistakes.some((mistake) => mistake.startsWith('Missing the main goal of '))
+      ).toBe(false);
+      expect(exercise.executionTips.some((tip) => tip.startsWith('Use the first rep of '))).toBe(
+        false
+      );
+      expect(exercise.executionTips.some((tip) => tip.includes('before adding speed'))).toBe(false);
+    }
+  });
+
+  it('uses unique seed-level coaching guidance for each exercise', () => {
+    const firstBenefits = exercises.map((exercise) => exercise.benefits[0]);
+    const firstMistakes = exercises.map((exercise) => exercise.commonMistakes[0]);
+    const firstTips = exercises.map((exercise) => exercise.executionTips[0]);
+
+    expect(new Set(firstBenefits).size).toBe(exercises.length);
+    expect(new Set(firstMistakes).size).toBe(exercises.length);
+    expect(new Set(firstTips).size).toBe(exercises.length);
   });
 
   it('does not share mutable array references between exercises', () => {
