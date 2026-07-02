@@ -109,13 +109,38 @@ const directYoutubeUrls: Record<string, string> = {
   Clamshells: 'https://www.youtube.com/watch?v=scAo-yWreY0'
 };
 
-const youtubeVideoId = (url: string) => new URL(url).searchParams.get('v');
+const youtubeIdPattern = /^[A-Za-z0-9_-]{11}$/;
 
+export const youtubeVideoId = (value: string): string | null => {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.replace(/^www\./, '');
+
+    if (hostname === 'youtube.com' && url.pathname === '/watch') {
+      const id = url.searchParams.get('v');
+      return id && youtubeIdPattern.test(id) ? id : null;
+    }
+
+    if (hostname === 'youtube.com' && url.pathname.startsWith('/shorts/')) {
+      const id = url.pathname.split('/')[2];
+      return id && youtubeIdPattern.test(id) ? id : null;
+    }
+
+    if (hostname === 'youtu.be') {
+      const id = url.pathname.slice(1);
+      return youtubeIdPattern.test(id) ? id : null;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
 
 const createExercise = (seed: ExerciseSeed): Exercise => {
   const details = categoryDetails[seed.category];
   const youtubeUrl = directYoutubeUrls[seed.title] ?? youtubeSearchUrl(seed.title);
-  const videoId = youtubeUrl.includes('/watch') ? youtubeVideoId(youtubeUrl) : null;
+  const videoId = youtubeVideoId(youtubeUrl);
 
   return {
     id: toId(seed.title),

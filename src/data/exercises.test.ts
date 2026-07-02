@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Exercise, ExerciseCategory } from '../types';
-import { exercises } from './exercises';
+import { exercises, youtubeVideoId } from './exercises';
 
 const requiredCategories: ExerciseCategory[] = [
   'Technique',
@@ -15,12 +15,39 @@ const requiredCategories: ExerciseCategory[] = [
 
 const hasText = (value: string) => value.trim().length > 0;
 const hasTextArray = (value: string[]) => value.length > 0 && value.every(hasText);
-const isDirectYoutubeUrl = (value: string) =>
-  /^https:\/\/(www\.)?youtube\.com\/watch\?v=/.test(value) ||
-  /^https:\/\/(www\.)?youtube\.com\/shorts\//.test(value) ||
-  /^https:\/\/youtu\.be\//.test(value);
-const isYoutubeSearchFallbackUrl = (value: string) =>
-  /^https:\/\/(www\.)?youtube\.com\/results\?search_query=.+/.test(value);
+const youtubeIdPattern = /^[A-Za-z0-9_-]{11}$/;
+const directYoutubeVideoId = (value: string) => {
+  const url = new URL(value);
+  const hostname = url.hostname.replace(/^www\./, '');
+
+  if (hostname === 'youtube.com' && url.pathname === '/watch') {
+    const id = url.searchParams.get('v');
+    return id && youtubeIdPattern.test(id) ? id : null;
+  }
+
+  if (hostname === 'youtube.com' && url.pathname.startsWith('/shorts/')) {
+    const id = url.pathname.split('/')[2];
+    return id && youtubeIdPattern.test(id) ? id : null;
+  }
+
+  if (hostname === 'youtu.be') {
+    const id = url.pathname.slice(1);
+    return youtubeIdPattern.test(id) ? id : null;
+  }
+
+  return null;
+};
+const isDirectYoutubeUrl = (value: string) => directYoutubeVideoId(value) !== null;
+const isYoutubeSearchFallbackUrl = (value: string) => {
+  const url = new URL(value);
+  const hostname = url.hostname.replace(/^www\./, '');
+
+  return (
+    hostname === 'youtube.com' &&
+    url.pathname === '/results' &&
+    hasText(url.searchParams.get('search_query') ?? '')
+  );
+};
 const isAllowedYoutubeUrl = (value: string) =>
   isDirectYoutubeUrl(value) || isYoutubeSearchFallbackUrl(value);
 const firstThreeWords = (value: string) => value.toLowerCase().split(/\s+/).slice(0, 3).join(' ');
@@ -94,6 +121,14 @@ describe('built-in exercise library', () => {
 
     for (const category of requiredCategories) {
       expect(categories.has(category)).toBe(true);
+    }
+  });
+
+  it('contains exactly 15 exercises per required category', () => {
+    for (const category of requiredCategories) {
+      const categoryExercises = exercises.filter((exercise) => exercise.category === category);
+
+      expect(categoryExercises).toHaveLength(15);
     }
   });
 
@@ -208,5 +243,13 @@ describe('built-in exercise library', () => {
     const directUrls = exercises.filter((exercise) => isDirectYoutubeUrl(exercise.youtubeUrl ?? ''));
 
     expect(directUrls.length).toBeGreaterThanOrEqual(24);
+  });
+
+  it('extracts direct YouTube video ids for thumbnail generation', () => {
+    expect(youtubeVideoId('https://www.youtube.com/watch?v=UPOZidhYrlw')).toBe('UPOZidhYrlw');
+    expect(youtubeVideoId('https://www.youtube.com/shorts/ABCDEFGHI_1')).toBe('ABCDEFGHI_1');
+    expect(youtubeVideoId('https://youtu.be/ZYXWVUTSR_1')).toBe('ZYXWVUTSR_1');
+    expect(youtubeVideoId('https://www.youtube.com/results?search_query=dead+bug')).toBeNull();
+    expect(youtubeVideoId('https://www.youtube.com/watch?v=short')).toBeNull();
   });
 });
