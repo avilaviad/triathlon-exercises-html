@@ -15,6 +15,69 @@ const requiredCategories: ExerciseCategory[] = [
 
 const hasText = (value: string) => value.trim().length > 0;
 const hasTextArray = (value: string[]) => value.length > 0 && value.every(hasText);
+const isDirectYoutubeUrl = (value: string) =>
+  /^https:\/\/(www\.)?youtube\.com\/watch\?v=/.test(value) ||
+  /^https:\/\/(www\.)?youtube\.com\/shorts\//.test(value) ||
+  /^https:\/\/youtu\.be\//.test(value);
+
+const genericGuidance: Record<
+  ExerciseCategory,
+  {
+    benefits: string[];
+    commonMistakes: string[];
+    executionTips: string[];
+  }
+> = {
+  Technique: {
+    benefits: ['Improves movement economy', 'Builds repeatable race mechanics'],
+    commonMistakes: ['Rushing the drill', 'Letting fatigue change the movement pattern'],
+    executionTips: ['Keep the effort relaxed', 'Stop the set if form breaks down']
+  },
+  Mobility: {
+    benefits: ['Restores usable range of motion', 'Supports smoother swim, bike, and run positions'],
+    commonMistakes: ['Forcing end range', 'Moving through pain instead of mild tension'],
+    executionTips: ['Use slow controlled breathing', 'Work within a comfortable range']
+  },
+  Stability: {
+    benefits: ['Improves joint control', 'Reduces wasted motion under fatigue'],
+    commonMistakes: ['Holding the breath', 'Letting the hips rotate or drop'],
+    executionTips: ['Move slowly before adding load', 'Keep ribs stacked over pelvis']
+  },
+  Stretching: {
+    benefits: ['Reduces post-session stiffness', 'Helps maintain consistent training positions'],
+    commonMistakes: ['Bouncing in the stretch', 'Chasing intensity instead of position'],
+    executionTips: ['Ease into the stretch gradually', 'Keep breathing steady throughout']
+  },
+  Prehab: {
+    benefits: ['Builds tissue capacity', 'Addresses common triathlon overuse areas'],
+    commonMistakes: ['Using momentum', 'Skipping the weaker side'],
+    executionTips: ['Use light resistance first', 'Keep reps precise and pain-free']
+  },
+  Breathing: {
+    benefits: ['Improves recovery control', 'Helps regulate effort during training'],
+    commonMistakes: ['Breathing only into the chest', 'Forcing long holds too early'],
+    executionTips: ['Keep the face and jaw relaxed', 'Return to normal breathing if dizzy']
+  },
+  Recovery: {
+    benefits: ['Promotes downregulation', 'Supports readiness for the next session'],
+    commonMistakes: ['Pressing too aggressively', 'Turning recovery work into another workout'],
+    executionTips: ['Keep intensity easy', 'Focus on areas that feel restricted after training']
+  },
+  Strength: {
+    benefits: ['Improves force production', 'Supports durability across swim, bike, and run'],
+    commonMistakes: ['Adding load before controlling position', 'Cutting the range of motion short'],
+    executionTips: ['Use crisp reps with full control', 'Leave one or two reps in reserve']
+  }
+};
+
+const hasExerciseSpecificGuidance = (
+  exercise: Exercise,
+  field: 'benefits' | 'commonMistakes' | 'executionTips'
+) => {
+  const genericItems = new Set(genericGuidance[exercise.category][field]);
+
+  return exercise[field].some((item) => !genericItems.has(item));
+};
 
 describe('built-in exercise library', () => {
   it('contains exactly 120 exercises', () => {
@@ -32,7 +95,10 @@ describe('built-in exercise library', () => {
   it('provides complete data for every exercise', () => {
     for (const exercise of exercises) {
       expect(hasText(exercise.title)).toBe(true);
+      expect(exercise.source).toBe('built-in');
       expect(requiredCategories).toContain(exercise.category);
+      expect(hasText(exercise.thumbnailUrl)).toBe(true);
+      expect(hasText(exercise.thumbnailAlt)).toBe(true);
       expect(hasText(exercise.description)).toBe(true);
       expect(hasTextArray(exercise.benefits)).toBe(true);
       expect(['swim', 'bike', 'run', 'general']).toContain(exercise.targetSport);
@@ -43,6 +109,7 @@ describe('built-in exercise library', () => {
       expect(hasTextArray(exercise.commonMistakes)).toBe(true);
       expect(hasTextArray(exercise.executionTips)).toBe(true);
       expect(hasText(exercise.youtubeUrl ?? '')).toBe(true);
+      expect(() => new URL(exercise.youtubeUrl ?? '')).not.toThrow();
     }
   });
 
@@ -50,5 +117,35 @@ describe('built-in exercise library', () => {
     const ids = exercises.map((exercise: Exercise) => exercise.id);
 
     expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('uses unique exercise titles', () => {
+    const titles = exercises.map((exercise) => exercise.title);
+
+    expect(new Set(titles).size).toBe(titles.length);
+  });
+
+  it('includes exercise-specific coaching guidance', () => {
+    for (const exercise of exercises) {
+      expect(hasExerciseSpecificGuidance(exercise, 'benefits')).toBe(true);
+      expect(hasExerciseSpecificGuidance(exercise, 'commonMistakes')).toBe(true);
+      expect(hasExerciseSpecificGuidance(exercise, 'executionTips')).toBe(true);
+    }
+  });
+
+  it('does not share mutable array references between exercises', () => {
+    const fields = ['benefits', 'commonMistakes', 'executionTips', 'equipment'] as const;
+
+    for (const field of fields) {
+      const arrays = exercises.map((exercise) => exercise[field]);
+
+      expect(new Set(arrays).size).toBe(arrays.length);
+    }
+  });
+
+  it('has at least 24 direct YouTube video links', () => {
+    const directUrls = exercises.filter((exercise) => isDirectYoutubeUrl(exercise.youtubeUrl ?? ''));
+
+    expect(directUrls.length).toBeGreaterThanOrEqual(24);
   });
 });

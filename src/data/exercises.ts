@@ -79,26 +79,64 @@ const youtubeSearchUrl = (title: string) =>
     `${title} triathlon exercise`
   )}`;
 
+const directYoutubeUrls: Record<string, string> = {
+  'Freestyle Catch-Up Drill': 'https://www.youtube.com/watch?v=UPOZidhYrlw',
+  'Single-Arm Freestyle Drill': 'https://www.youtube.com/watch?v=_wzmFQ--lys',
+  'Fingertip Drag Drill': 'https://www.youtube.com/watch?v=O_muRVVNpaQ',
+  'Front Sculling Drill': 'https://www.youtube.com/watch?v=jsTS-EC10KQ',
+  'High Cadence Spin-Ups': 'https://www.youtube.com/watch?v=rLkEJ1TudBk',
+  'Single-Leg Pedal Drill': 'https://www.youtube.com/watch?v=VYQNApn-_v4',
+  'A-Skip Drill': 'https://www.youtube.com/watch?v=GQg9L28bi1g',
+  'B-Skip Drill': 'https://www.youtube.com/watch?v=Zy97yNE7WEE',
+  'Ankle Knee-to-Wall Mobilization': 'https://www.youtube.com/watch?v=ElrpduJn92Y',
+  'Hip 90/90 Switches': 'https://www.youtube.com/watch?v=m51AZSXMvEA',
+  'Thoracic Open Book Rotation': 'https://www.youtube.com/watch?v=peeW19ofFUg',
+  'Shoulder CARs': 'https://www.youtube.com/watch?v=9FFiaMIkcNY',
+  'Dead Bug': 'https://www.youtube.com/watch?v=g_BYB0R-4Ws',
+  'Bird Dog': 'https://www.youtube.com/watch?v=k2azbhhuKuM',
+  'Pallof Press Hold': 'https://www.youtube.com/watch?v=4G2Kj8Mc2WU',
+  'Single-Leg Glute Bridge': 'https://www.youtube.com/watch?v=3NXv0Nany-Q',
+  'Standing Calf Stretch': 'https://www.youtube.com/watch?v=mafo7o7OnFo',
+  'Kneeling Hip Flexor Stretch': 'https://www.youtube.com/watch?v=34SlL-PPCWQ',
+  'Hamstring Strap Stretch': 'https://www.youtube.com/watch?v=Il1L75v6gq0',
+  'Quad Couch Stretch': 'https://www.youtube.com/watch?v=Fg-lwNBzVV8',
+  'Band Pull-Aparts': 'https://www.youtube.com/watch?v=3OYSIWaJJk4',
+  'Tibialis Raises': 'https://www.youtube.com/watch?v=RHWRxiBe1iU',
+  'Eccentric Calf Raises': 'https://www.youtube.com/watch?v=aD2NhWvuL8Y',
+  Clamshells: 'https://www.youtube.com/watch?v=scAo-yWreY0'
+};
+
+const youtubeVideoId = (url: string) => new URL(url).searchParams.get('v');
+
+const sentenceStartLower = (value: string) => value.charAt(0).toLowerCase() + value.slice(1);
+
 const createExercise = (seed: ExerciseSeed): Exercise => {
   const details = categoryDetails[seed.category];
+  const youtubeUrl = directYoutubeUrls[seed.title] ?? youtubeSearchUrl(seed.title);
+  const videoId = youtubeUrl.includes('/watch') ? youtubeVideoId(youtubeUrl) : null;
+  const exerciseIntent = sentenceStartLower(seed.description);
 
   return {
     id: toId(seed.title),
     source: 'built-in',
     title: seed.title,
     category: seed.category,
-    thumbnailUrl: '/pwa-192x192.png',
+    thumbnailUrl: videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '/pwa-192x192.png',
     thumbnailAlt: `${seed.title} exercise thumbnail`,
     description: seed.description,
-    benefits: [...details.benefits, sportBenefits[seed.targetSport]],
+    benefits: [
+      `Reinforces ${exerciseIntent}`,
+      ...details.benefits,
+      sportBenefits[seed.targetSport]
+    ],
     targetSport: seed.targetSport,
     difficulty: seed.difficulty,
-    equipment: seed.equipment,
+    equipment: [...seed.equipment],
     prescription: seed.prescription,
     frequency: seed.frequency,
-    commonMistakes: details.commonMistakes,
-    executionTips: details.executionTips,
-    youtubeUrl: youtubeSearchUrl(seed.title)
+    commonMistakes: [`Missing the main goal of ${seed.title}: ${exerciseIntent}`, ...details.commonMistakes],
+    executionTips: [`Use the first rep of ${seed.title} to lock in the setup before adding speed`, ...details.executionTips],
+    youtubeUrl
   };
 };
 
